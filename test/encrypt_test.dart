@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:waijudi/utils/encrypt.dart';
+import 'package:waijudi/util/encrypt.dart';
 import 'dart:convert';
 
 void main() {
