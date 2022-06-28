@@ -100,6 +100,6 @@ class ApiClient {
 
   Future<String> vodDecrypt (String url) async {
     var params = {'url': url};
-    return _get('/web/common/vodDecrypt', params: params).then((data) => data.url);
+    return _get('/web/common/vodDecrypt', params: params).then((data) => data['url']);
   }
 }

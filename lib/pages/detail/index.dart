@@ -6,9 +6,11 @@ import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/video_image.dart';
 import 'widgets/details.dart';
+import 'package:fijkplayer/fijkplayer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class VideoDetail extends StatelessWidget {
-  const VideoDetail({Key? key}) : super(key: key);
+  VideoDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class VideoDetail extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           appBar: CustomAppBar(
-            "Product",
+            "Detail",
             leadings: [
               CustomAppBarAction(
                 () => Get.back(),
@@ -32,16 +34,25 @@ class VideoDetail extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Obx(
-                  () => VideoImage(
-                    controller.appController.video.vodPic,
-                    height: Get.width - 50,
-                    padding: 25,
+                  () => Container(
+                    child: controller.isPlay ? FijkView(
+                      color: AppColors.DARK,
+                      player: controller.player,
+                      width: Get.width,
+                      height: 250,
+                      cover: CachedNetworkImageProvider(controller.appController.video.vodPic),
+                    ) : VideoImage(
+                      controller.appController.video.vodPic,
+                      width: Get.width,
+                      height: Get.width - 50,
+                      padding: 25,
+                    )
                   ),
                 ),
               ],
             ),
           ),
-          bottomNavigationBar: Obx(() => Details(controller.appController.video)),
+          bottomNavigationBar: Details(),
         );
       },
     );

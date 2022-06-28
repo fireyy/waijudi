@@ -22,7 +22,7 @@ class VideoImage extends StatelessWidget {
         : Padding(
             padding: EdgeInsets.all(padding),
             child: CachedNetworkImage(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       alignment: Alignment.topCenter,
                       width: width,
                       height: height,

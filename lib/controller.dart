@@ -13,7 +13,7 @@ class AppController extends GetxController{
 
   goToDetail(VideoItem item) {
     setVideo(item);
-    Get.toNamed('detail/${item.id}');
+    Get.toNamed('/detail/${item.id}');
   }
 
 }

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/models/line.dart';
 import 'package:waijudi/models/drama.dart';
+import 'package:fijkplayer/fijkplayer.dart';
 
-import '../../controller.dart';
+import 'package:waijudi/controller.dart';
 
 class DetailController extends GetxController {
   AppController appController = Get.find();
@@ -12,7 +12,15 @@ class DetailController extends GetxController {
   final RxList<Drama> drama = RxList<Drama>([]);
   final Rx<String> _videoUrl = Rx<String>('');
   String get videoUrl => _videoUrl.value;
+  final FijkPlayer player = FijkPlayer();
+  final RxBool _isPlay = RxBool(false);
+  bool get isPlay => _isPlay.value;
 
+  watch () {
+    _isPlay.value = true;
+    player.setDataSource(videoUrl, autoPlay: true);
+  }
+  
   DetailController() {
     loadVideo();
   }
