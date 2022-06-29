@@ -24,7 +24,7 @@ class OrganicButton extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Text(
-              this.label,
+              label,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -41,7 +41,7 @@ class OrganicButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(40),
             ),
             child: Icon(
-              this.icon,
+              icon,
               color: AppColors.WHITE,
               size: 16,
             ),

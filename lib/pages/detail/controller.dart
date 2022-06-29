@@ -34,7 +34,7 @@ class DetailController extends GetxController {
       drama.value = await appController.apiClient.getDramaDetail(id: videoId, lineId: lineId);
       await getVodDecrypt(drama.first.vodDramaUrl);
     } catch (error) {
-      print(error.toString());
+      throw Exception(error);
     }
   }
 
@@ -52,7 +52,7 @@ class DetailController extends GetxController {
       lines.value = await appController.apiClient.getLine(videoId);
       await loadDramaDetail(lines.first.vodLineId);
     } catch (error) {
-      print(error.toString());
+      throw Exception(error);
     }
   }
 }

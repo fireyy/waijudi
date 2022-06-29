@@ -10,7 +10,7 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class VideoDetail extends StatelessWidget {
-  VideoDetail({Key? key}) : super(key: key);
+  const VideoDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

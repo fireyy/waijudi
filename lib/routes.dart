@@ -5,5 +5,5 @@ import 'pages/detail/index.dart';
 
 routes() => [
   GetPage(name: "/", page: () => const Home()),
-  GetPage(name: "/detail/:id", page: () => VideoDetail()),
+  GetPage(name: "/detail/:id", page: () => const VideoDetail()),
 ];

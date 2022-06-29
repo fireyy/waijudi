@@ -3,6 +3,7 @@ import 'dart:convert';
 
 var l = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
+// ignore_for_file: prefer_typing_uninitialized_variables
 String decode (String t) {
   t = t.replaceAll(RegExp(r'[\s]'), '');
   var e = t.length;
@@ -59,14 +60,10 @@ String encode (String t) {
     e = t.codeUnitAt(s) << 8;
     n = t.codeUnitAt(++s);
     r = e + n;
-    a +=
-      l[r >> 10] +
-      l[(r >> 4) & 63] +
-      l[(r << 2) & 63] +
-      '=';
+    a += '${l[r >> 10]}${l[(r >> 4) & 63]}${l[(r << 2) & 63]}=';
   } else if (1 == o) {
     r = t.codeUnitAt(s);
-    a += l[r >> 2] + l[(r << 4) & 63] + '==';
+    a += '${l[r >> 2]}${l[(r << 4) & 63]}==';
   }
   return a;
 }
