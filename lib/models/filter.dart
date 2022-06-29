@@ -1,10 +1,21 @@
+import 'package:waijudi/util/utils.dart';
+
 enum FilterType {
   ranking,
   area,
   type,
   year,
-  vod_status,
+  vodStatus,
   cate,
+}
+
+FilterType getFilterTypeFromString(String str) {
+  for (FilterType element in FilterType.values) {
+     if (element.toString() == lowerCamelCase(str)) {
+        return element;
+     }
+  }
+  return FilterType.ranking;
 }
 
 class Filter {
@@ -16,15 +27,6 @@ class Filter {
   Filter.fromJson(Map jsonMap)
     : id = jsonMap['id'].toString(),
       name = jsonMap['name'].toString();
-}
-
-FilterType getFilterTypeFromString(String str) {
-  for (FilterType element in FilterType.values) {
-     if (element.toString() == str) {
-        return element;
-     }
-  }
-  return FilterType.ranking;
 }
 
 class FilterModel {
