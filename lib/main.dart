@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'controller.dart';
 import 'routes.dart';
 import 'util/colors.dart';
+import 'package:waijudi/util/api_client.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
+    Get.put(ApiClient());
     Get.put(AppController());
 
     return GetMaterialApp(

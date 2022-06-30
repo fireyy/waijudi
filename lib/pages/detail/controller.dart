@@ -55,4 +55,10 @@ class DetailController extends GetxController {
       throw Exception(error);
     }
   }
+
+  @override
+  void onClose() {
+    player.release();
+    super.onClose();
+  }
 }

@@ -5,12 +5,11 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/organic_button.dart';
 
 class Details extends StatelessWidget {
-  final DetailController controller = Get.find();
-
-  Details({Key? key}) : super(key: key);
+  const Details({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final DetailController controller = Get.find();
     return Container(
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(

@@ -6,12 +6,14 @@ class VideoImage extends StatelessWidget {
   final double width;
   final double height;
   final double padding;
+  final BoxFit fit;
   const VideoImage(
     this.image, {
     Key? key,
     this.padding = 0,
     this.width = 120,
     this.height = 120,
+    this.fit = BoxFit.contain,
   }) : super(key: key);
 
   @override

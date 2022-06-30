@@ -17,7 +17,6 @@ class CustomAppBarAction extends StatelessWidget {
         child: TextButton(
           onPressed: action,
           style: TextButton.styleFrom(
-             backgroundColor: AppColors.WHITE,
              padding: EdgeInsets.zero,
              shape: RoundedRectangleBorder(
                borderRadius: BorderRadius.circular(32),

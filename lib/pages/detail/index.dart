@@ -20,13 +20,11 @@ class VideoDetail extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           appBar: CustomAppBar(
-            "Detail",
-            leadings: [
-              CustomAppBarAction(
-                () => Get.back(),
-                Icons.arrow_back,
-              )
-            ],
+            title: const Text('Detail'),
+            leading: CustomAppBarAction(
+              () => Get.back(),
+              Icons.arrow_back,
+            ),
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -52,7 +50,7 @@ class VideoDetail extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: Details(),
+          bottomNavigationBar: const Details(),
         );
       },
     );

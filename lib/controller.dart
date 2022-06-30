@@ -4,7 +4,7 @@ import 'package:waijudi/models/videoitem.dart';
 
 class AppController extends GetxController{
 
-  ApiClient apiClient = ApiClient();
+  ApiClient apiClient = Get.find();
   final Rx<VideoItem> _video = Rx<VideoItem>(VideoItem());
   setVideo(VideoItem value) => _video.value = value;
   VideoItem get video {

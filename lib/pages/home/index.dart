@@ -18,8 +18,11 @@ class Home extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           appBar: CustomAppBar(
-            "Waijudi",
             actions: [
+              CustomAppBarAction(
+                () => Get.toNamed('/search'),
+                Icons.search,
+              ),
               CustomAppBarAction(
                 () => controller.loadCategories(),
                 Icons.filter_list_alt,

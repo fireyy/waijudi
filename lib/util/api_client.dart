@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:waijudi/models/section.dart';
+import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/util/encrypt.dart';
 
 import 'package:waijudi/models/api_response.dart';
@@ -81,11 +83,11 @@ class ApiClient {
     }).then((data) => SearchResult.fromJson(data));
   }
 
-  Future<SearchResult> searchByName (String name,
+  Future<SearchResultWithVideoItem> searchByName (String name,
       {int page = 1, int pageSize = 20}) async {
     var params = {'name': name, 'page': page, 'pageSize': pageSize};
 
-    return _get('/web/search_home/getHodVod', params: params).then((data) => SearchResult.fromJson(data));
+    return _get('/web/search_home/getHodVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 
   Future<List<LineModel>> getLine (int id) async {
