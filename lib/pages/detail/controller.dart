@@ -10,6 +10,8 @@ class DetailController extends GetxController {
   final int videoId = int.parse(Get.parameters['id'] ?? '0');
   final RxList<LineModel> lines = RxList<LineModel>([]);
   final RxList<Drama> drama = RxList<Drama>([]);
+  final RxInt selectedDrama = 0.obs;
+  final RxInt selectedLineId = 0.obs;
   final Rx<String> _videoUrl = Rx<String>('');
   String get videoUrl => _videoUrl.value;
   final FijkPlayer player = FijkPlayer();
@@ -25,12 +27,14 @@ class DetailController extends GetxController {
     loadVideo();
   }
 
-  selectLine (int lineId) {
-    loadDramaDetail(lineId);
+  selectLine (int lineId) async {
+    await loadDramaDetail(lineId);
+    changePlay();
   }
 
   loadDramaDetail(int lineId) async {
     try {
+      selectedLineId.value = lineId;
       drama.value = await appController.apiClient.getDramaDetail(id: videoId, lineId: lineId);
       await getVodDecrypt(drama.first.vodDramaUrl);
     } catch (error) {
@@ -42,9 +46,19 @@ class DetailController extends GetxController {
     _videoUrl.value = await appController.apiClient.vodDecrypt(url);
   }
 
-  selectEpisode (int index) {
+  selectEpisode (int index) async {
+    selectedDrama.value = index;
     var url = drama.elementAt(index).vodDramaUrl;
-    getVodDecrypt(url);
+    await getVodDecrypt(url);
+    changePlay();
+  }
+
+  changePlay () {
+    if (isPlay) {
+      print('=====================changePlay: $videoUrl');
+      player.reset();
+      player.setDataSource(videoUrl, autoPlay: true);
+    }
   }
 
   loadVideo() async {

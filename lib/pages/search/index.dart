@@ -25,11 +25,8 @@ class Search extends StatelessWidget {
             }),
             actions: [
               TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(fontSize: 16, color: AppColors.DARK),
-                ),
                 onPressed: () => Get.back(),
-                child: const Text('Cancel'),
+                child: const Text('Cancel', style: TextStyle(fontSize: 16, color: Colors.black)),
               ),
             ],
           ),

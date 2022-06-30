@@ -25,6 +25,17 @@ class AppColors {
   // ignore: non_constant_identifier_names
   static final MaterialColor SHADOW = _factoryColor(0xffE7EAF0);
 
+  static final ButtonStyle lineButton = TextButton.styleFrom(
+    padding: EdgeInsets.zero,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(
+        color: LIGHT_GREY,
+        width: 1,
+        style: BorderStyle.solid,
+      ),
+    )
+  );
+
   static MaterialColor hex(String hex) => AppColors._factoryColor(AppColors._getColorHexFromStr(hex));
 
   static MaterialColor _factoryColor(int color) {
