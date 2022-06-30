@@ -45,6 +45,10 @@ class ListController extends GetxController {
   filter (Map<String, dynamic> data) async {
     print('==================filter: $data');
     var params = filterParams.value.toJson();
+    filterMap.value = {
+      ...filterMap,
+      ...data,
+    };
     filterParams.value = FilterParams.fromJson({
       ...params,
       ...data
