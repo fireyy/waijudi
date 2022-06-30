@@ -1,28 +1,15 @@
-import 'package:waijudi/util/utils.dart';
-
-enum FilterType {
-  ranking,
-  area,
-  type,
-  year,
-  vodStatus,
-  cate,
-}
-
-FilterType getFilterTypeFromString(String str) {
-  for (FilterType element in FilterType.values) {
-     if (element.toString() == lowerCamelCase(str)) {
-        return element;
-     }
-  }
-  return FilterType.ranking;
-}
-
 class Filter {
   String id;
   String name;
 
   Filter({this.id = '', this.name = ''});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
 
   Filter.fromJson(Map jsonMap)
     : id = jsonMap['id'].toString(),
@@ -30,17 +17,17 @@ class Filter {
 }
 
 class FilterModel {
-  FilterType name;
+  String name;
   List<Filter> list = [];
 
-  FilterModel({this.name = FilterType.ranking});
+  FilterModel({this.name = ''});
 
   FilterModel.fromJson(Map jsonMap)
-    : name = getFilterTypeFromString(jsonMap['name'].toString()),
+    : name = jsonMap['name'].toString(),
       list = (jsonMap['list'] as List).map((d) => Filter.fromJson(d)).toList();
 }
 
-class FilterModel2 {
+class FilterParams {
   String ranking;
   int area;
   int year;
@@ -50,8 +37,8 @@ class FilterModel2 {
   int page;
   int pageSize;
 
-  FilterModel2({
-    this.ranking = '',
+  FilterParams({
+    this.ranking = '最近更新',
     this.area = 0,
     this.year = 0,
     this.type = 0,
@@ -67,20 +54,20 @@ class FilterModel2 {
       'area': area,
       'year': year,
       'type': type,
-      'vodStatus': vodStatus,
+      'vod_status': vodStatus,
       'cate': cate,
       'page': page,
       'pageSize': pageSize,
     };
   }
 
-  FilterModel2.fromJson(Map jsonMap)
+  FilterParams.fromJson(Map jsonMap)
       : ranking = jsonMap['ranking'].toString(),
-        area = jsonMap['area'].toInt(),
-        year = jsonMap['year'].toInt(),
-        type = jsonMap['type'].toInt(),
-        vodStatus = jsonMap['vod_status'].toInt(),
-        cate = jsonMap['cate'].toInt(),
+        area = int.parse('${jsonMap['area']}'),
+        year = int.parse('${jsonMap['year']}'),
+        type = int.parse('${jsonMap['type']}'),
+        vodStatus = int.parse('${jsonMap['vod_status']}'),
+        cate = int.parse('${jsonMap['cate']}'),
         page = jsonMap['page'].toInt(),
         pageSize = jsonMap['pageSize'].toInt();
 }

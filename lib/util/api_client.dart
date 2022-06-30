@@ -70,17 +70,17 @@ class ApiClient {
     return _post('/web/video_home/getNavigation').then((data) => (data as List).map((d) => Category.fromJson(d)).toList());
   }
 
-  Future<SearchResult> searchByFilter (params) async {
+  Future<SearchResultWithVideoItem> searchByFilter (FilterParams params) async {
 
-    return _get('/web/vod_type/get', params: params).then((data) => SearchResult.fromJson(data));
+    return _get('/web/vod_type/get', params: params.toJson()).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 
-  Future<SearchResult> getType () async {
+  Future<List<FilterModel>> getType () async {
 
     return _get('/web/vod_type/getType', params: {
       'pageSize': 99,
       'page': 1
-    }).then((data) => SearchResult.fromJson(data));
+    }).then((data) => (data as List).map((d) => FilterModel.fromJson(d)).toList());
   }
 
   Future<SearchResultWithVideoItem> searchByName (String name,

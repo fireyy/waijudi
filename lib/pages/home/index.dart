@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
                 Icons.search,
               ),
               CustomAppBarAction(
-                () => controller.loadCategories(),
+                () => Get.toNamed('/list'),
                 Icons.filter_list_alt,
               ),
             ],
