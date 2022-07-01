@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:waijudi/models/section.dart';
-import 'package:waijudi/models/videoitem.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:waijudi/util/encrypt.dart';
 
 import 'package:waijudi/models/api_response.dart';
@@ -9,22 +8,26 @@ import 'package:waijudi/models/category.dart';
 import 'package:waijudi/models/line.dart';
 import 'package:waijudi/models/drama.dart';
 import 'package:waijudi/models/filter.dart';
+import 'package:waijudi/util/storage.dart';
 
 class ApiClient {
   static final _client = ApiClient._internal();
   final _http = ApiClient.createDio();
+
+  set token(String value) => _http.options.headers['token'] = value;
 
   ApiClient._internal();
 
   factory ApiClient() => _client;
 
   static Dio createDio() {
+    Storage settings = Get.find();
     var options = BaseOptions(
       baseUrl: 'https://waijudi.ywhuilong.com',
       connectTimeout: 15000,
       receiveTimeout: 3000,
       headers: {
-        'token': '14f2e846-6b31-460b-9ebc-34006a0ce0b1' //TODO: renew token
+        'token': settings.token //TODO: renew token
       },
       contentType: Headers.formUrlEncodedContentType,
       // responseType: ResponseType.plain,
@@ -104,4 +107,12 @@ class ApiClient {
     var params = {'url': url};
     return _get('/web/common/vodDecrypt', params: params).then((data) => data['url']);
   }
+
+  Future<String> login (String mobile, String password) async {
+    var params = {'mobile': mobile, 'password': password, 'ip': ''};
+    return _post('/web/user/login', params: params).then((data) => data['token']);
+  }
+  // /web/user/login params=k3xm7yaxQdeyJpcCI6IjguMjE5LjEzMi4xMTEiLCJtb2JpbGUiOiIxODkxNzU2NjgyOSIsInBhc3N3b3JkIjoiemh1YW5sIn0=
+  // /web/user_info/personalCenter
+  // /web/user_info/playbackRecord
 }

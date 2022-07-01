@@ -22,11 +22,11 @@ class ListController extends GetxController {
 
   getType () async {
     filters.value = await appController.apiClient.getType();
-    filters.forEach((element) {
+    for (var filter in filters) {
       filterMap.addAll({
-        element.name: element.list.first.id
+        filter.name: filter.list.first.id
       });
-    });
+    }
   }
 
   searchByFilter (pageKey) async {
