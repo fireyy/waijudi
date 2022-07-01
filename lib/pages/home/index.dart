@@ -4,11 +4,19 @@ import 'package:get/get.dart';
 import 'package:waijudi/pages/home/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
-import 'widgets/list_sections.dart';
-import 'widgets/list_categories.dart';
+import 'package:waijudi/pages/home/widgets/list_sections.dart';
+import 'package:waijudi/pages/home/widgets/list_categories.dart';
+import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
+  Future<bool> onRefresh() {
+    return Future<bool>.delayed(const Duration(seconds: 2), () {
+      print('================onRefresh');
+      return true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +37,55 @@ class Home extends StatelessWidget {
               ),
             ],
           ),
-          body: CustomScrollView(
-            slivers: <Widget>[
-              SliverToBoxAdapter(
-                child: ListCategories(),
-              ),
-              ListSections(),
-            ],
+          body: PullToRefreshNotification(
+            color: Colors.blue,
+            pullBackOnRefresh: true,
+            onRefresh: onRefresh,
+            child: CustomScrollView(
+              physics: const AlwaysScrollableClampingScrollPhysics(),
+              slivers: <Widget>[
+                PullToRefreshContainer(buildPulltoRefreshImage),
+                SliverToBoxAdapter(
+                  child: ListCategories(),
+                ),
+                ListSections(),
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget buildPulltoRefreshImage(PullToRefreshScrollNotificationInfo? info) {
+    final double offset = info?.dragOffset ?? 0.0;
+    Widget refreshWidget = Container();
+    if (info?.refreshWidget != null) {
+      refreshWidget = info?.refreshWidget ?? Container();
+    }
+
+    return SliverToBoxAdapter(
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          SizedBox(
+              height: 0 + offset,
+              width: double.infinity,
+              child: Image.asset(
+                'assets/logo.png',
+                //fit: offset > 0.0 ? BoxFit.cover : BoxFit.fill,
+                fit: BoxFit.contain,
+              )),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                refreshWidget,
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
