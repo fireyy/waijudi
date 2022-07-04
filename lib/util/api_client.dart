@@ -1,5 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:get/get.dart' hide FormData;
+import 'package:get/get.dart';
 import 'package:waijudi/util/encrypt.dart';
 
 import 'package:waijudi/models/api_response.dart';
@@ -10,40 +9,50 @@ import 'package:waijudi/models/drama.dart';
 import 'package:waijudi/models/filter.dart';
 import 'package:waijudi/util/storage.dart';
 
-class ApiClient {
-  static final _client = ApiClient._internal();
-  final _http = ApiClient.createDio();
+class ApiClient extends GetConnect {
+  @override
+  void onInit() {
+    // httpClient.defaultDecoder = (json) => ApiResponse.fromJson(json);
+    httpClient.baseUrl = 'https://waijudi.ywhuilong.com';
+    httpClient.defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
+    httpClient.timeout = const Duration(seconds: 15);
 
-  set token(String value) => _http.options.headers['token'] = value;
+    addRequestModifier();
 
-  ApiClient._internal();
+    httpClient.addResponseModifier((request, response) {
+      printInfo(
+        info: 'Status Code: ${response.statusCode}\n'
+            'Data: ${response.bodyString?.toString() ?? ''}',
+      );
+      return response;
+    });
+    super.onInit();
+  }
 
-  factory ApiClient() => _client;
+  void addRequestModifier() {
+    httpClient.addRequestModifier<dynamic>((request) {
+      if (Storage.hasData('token')) {
+        request.headers['token'] = Storage.getValue('token');
+      }
+      // request.headers['token'] = '63e6aba8-f7fa-4f1f-b9c9-ab3ee9a8f3d4';
+      printInfo(
+        info: 'REQUEST ║ ${request.method.toUpperCase()}\n'
+            'url: ${request.url}\n'
+            'Headers: ${request.headers}\n'
+            'Body: ${request.files?.toString() ?? ''}\n',
+      );
 
-  static Dio createDio() {
-    Storage settings = Get.find();
-    var options = BaseOptions(
-      baseUrl: 'https://waijudi.ywhuilong.com',
-      connectTimeout: 15000,
-      receiveTimeout: 3000,
-      headers: {
-        'token': settings.token //TODO: renew token
-      },
-      contentType: Headers.formUrlEncodedContentType,
-      // responseType: ResponseType.plain,
-    );
-    var dio = Dio(options);
-    dio.interceptors.add(LogInterceptor(requestHeader: false, responseHeader: false));
-    return dio;
+      return request;
+    });
   }
 
   Future<dynamic> _post (String uri, { Map? params }) async {
-    FormData formData = FormData.fromMap(params != null ? {
-      'params': sign(params)
-    } : {});
-    var response = await _http.post(uri, data: formData);
-    // print(response.data);
-    var decodedResponse = ApiResponse.fromJson(response.data);
+    final formData = params != null ? FormData({
+      'params': sign(params),
+    }): {};
+    var response = await post(uri, formData);
+    // print(response.body);
+    var decodedResponse = ApiResponse.fromJson(response.body);
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {
@@ -52,9 +61,9 @@ class ApiClient {
   }
 
   Future<dynamic> _get (String uri, { Map<String, dynamic>? params }) async {
-    var response = await _http.get(uri, queryParameters: params ?? {});
-    // print(response.data);
-    var decodedResponse = ApiResponse.fromJson(response.data);
+    var response = await get(uri, query: params ?? {});
+    // print(response.body);
+    var decodedResponse = ApiResponse.fromJson(response.body);
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {

@@ -1,10 +1,20 @@
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 
 class Storage {
-  Storage(StreamingSharedPreferences preferences)
-      : token = preferences.getString('token', defaultValue: 'b99d61d4-962e-4c52-b1d7-d98b59b9641f'),
-        darkMode = preferences.getBool('darkMode', defaultValue: false);
+  const Storage._();
 
-  final Preference<String> token;
-  final Preference<bool> darkMode;
+  static final GetStorage _storage = GetStorage();
+
+  static GetStorage get storage => _storage;
+
+  static Future<void> saveValue(String key, dynamic value) =>
+      _storage.writeIfNull(key, value);
+
+  static T? getValue<T>(String key) => _storage.read<T>(key);
+
+  static bool hasData(String key) => _storage.hasData(key);
+
+  static Future<void> removeValue(String key) => _storage.remove(key);
+
+  static Future<void> clearStorage() => _storage.erase();
 }

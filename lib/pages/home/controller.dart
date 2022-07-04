@@ -11,7 +11,9 @@ class HomeController extends GetxController {
   Category get selectedCategory => _selectedCategory.value;
   RxList<Section> homeData = RxList<Section>([]);
 
-  HomeController() {
+  @override
+  void onInit() {
+    super.onInit();
     loadCategories();
   }
 
@@ -19,7 +21,7 @@ class HomeController extends GetxController {
     //Load categories
     List<Category> dataCategories = await appController.apiClient.getNavigation();
     categories.addAll(dataCategories);
-    selectCategory(categories.first);
+    await selectCategory(categories.first);
   }
 
   selectCategory(Category category) async {

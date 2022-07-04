@@ -8,52 +8,45 @@ import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/pages/home/widgets/list_categories.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 
-class Home extends StatelessWidget {
+class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
 
-  Future<bool> onRefresh() {
-    return Future<bool>.delayed(const Duration(seconds: 2), () {
-      print('================onRefresh');
-      return true;
-    });
+  Future<bool> onRefresh() async {
+    await controller.loadCategories();
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      init: HomeController(),
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: AppColors.LIGHT,
-          appBar: CustomAppBar(
-            actions: [
-              CustomAppBarAction(
-                () => Get.toNamed('/search'),
-                Icons.search,
-              ),
-              CustomAppBarAction(
-                () => Get.toNamed('/list'),
-                Icons.filter_list_alt,
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: AppColors.LIGHT,
+      appBar: CustomAppBar(
+        actions: [
+          CustomAppBarAction(
+            () => Get.toNamed('/search'),
+            Icons.search,
           ),
-          body: PullToRefreshNotification(
-            color: Colors.blue,
-            pullBackOnRefresh: true,
-            onRefresh: onRefresh,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableClampingScrollPhysics(),
-              slivers: <Widget>[
-                PullToRefreshContainer(buildPulltoRefreshImage),
-                SliverToBoxAdapter(
-                  child: ListCategories(),
-                ),
-                ListSections(),
-              ],
+          CustomAppBarAction(
+            () => Get.toNamed('/list'),
+            Icons.filter_list_alt,
+          ),
+        ],
+      ),
+      body: PullToRefreshNotification(
+        color: Colors.blue,
+        pullBackOnRefresh: true,
+        onRefresh: onRefresh,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableClampingScrollPhysics(),
+          slivers: <Widget>[
+            PullToRefreshContainer(buildPulltoRefreshImage),
+            SliverToBoxAdapter(
+              child: ListCategories(),
             ),
-          ),
-        );
-      },
+            ListSections(),
+          ],
+        ),
+      ),
     );
   }
 
