@@ -55,6 +55,8 @@ class ApiClient extends GetConnect {
     var decodedResponse = ApiResponse.fromJson(response.body);
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
+    } else if (decodedResponse.code == 2008) {
+      Get.offNamed('/login');
     } else {
       throw Exception(decodedResponse.msg);
     }
@@ -66,6 +68,8 @@ class ApiClient extends GetConnect {
     var decodedResponse = ApiResponse.fromJson(response.body);
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
+    } else if (decodedResponse.code == 2008) {
+      Get.offNamed('/login');
     } else {
       throw Exception(decodedResponse.msg);
     }
