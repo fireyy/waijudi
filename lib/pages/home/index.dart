@@ -53,7 +53,8 @@ class Home extends GetView<HomeController> {
   Widget buildPulltoRefreshImage(PullToRefreshScrollNotificationInfo? info) {
     final double offset = info?.dragOffset ?? 0.0;
     Widget refreshWidget = Container();
-    if (info?.refreshWidget != null) {
+    if (info?.refreshWidget != null &&
+         offset > 18.0) {
       refreshWidget = info?.refreshWidget ?? Container();
     }
 
@@ -61,14 +62,6 @@ class Home extends GetView<HomeController> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          SizedBox(
-              height: 0 + offset,
-              width: double.infinity,
-              child: Image.asset(
-                'assets/logo.png',
-                //fit: offset > 0.0 ? BoxFit.cover : BoxFit.fill,
-                fit: BoxFit.contain,
-              )),
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
