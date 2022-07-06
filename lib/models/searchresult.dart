@@ -29,7 +29,7 @@ class SearchResultWithVideoItem {
 
   SearchResultWithVideoItem.fromJson(Map jsonMap)
       : total = jsonMap['total'].toInt(),
-        perPage = int.parse(jsonMap['per_page']),
+        perPage = jsonMap['per_page'] is int ? jsonMap['per_page'] : int.parse(jsonMap['per_page']),
         currentPage = jsonMap['current_page'].toInt(),
         lastPage = jsonMap['last_page'].toInt(),
         data = (jsonMap['data'] as List<dynamic>)
