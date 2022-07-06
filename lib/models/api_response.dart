@@ -4,12 +4,14 @@ import 'dart:convert';
 class ApiResponse {
   int code;
   String msg;
-  String url;
+  String? url;
   dynamic data;
+
+  ApiResponse({this.code = 1, this.msg = ''});
 
   ApiResponse.fromJson(Map jsonMap)
       : code = jsonMap['code'].toInt(),
         msg = jsonMap['msg'].toString(),
-        url = jsonMap['url'].toString(),
-        data = jsonDecode(decode(jsonMap['data']['response'].substring(10)));
+        url = (jsonMap['url'] ?? '').toString(),
+        data = jsonMap['data'] != null ? jsonDecode(decode(jsonMap['data']['response'].substring(10))) : {};
 }

@@ -8,7 +8,7 @@ class Storage {
   static GetStorage get storage => _storage;
 
   static Future<void> saveValue(String key, dynamic value) =>
-      _storage.writeIfNull(key, value);
+      _storage.write(key, value);
 
   static T? getValue<T>(String key) => _storage.read<T>(key);
 

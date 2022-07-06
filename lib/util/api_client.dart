@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:waijudi/util/encrypt.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 
 import 'package:waijudi/models/api_response.dart';
 import 'package:waijudi/models/searchresult.dart';
@@ -12,19 +13,31 @@ import 'package:waijudi/util/storage.dart';
 class ApiClient extends GetConnect {
   @override
   void onInit() {
-    // httpClient.defaultDecoder = (json) => ApiResponse.fromJson(json);
+    httpClient.defaultDecoder = (json) => ApiResponse.fromJson(json);
     httpClient.baseUrl = 'https://waijudi.ywhuilong.com';
     httpClient.defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
     httpClient.timeout = const Duration(seconds: 15);
 
     addRequestModifier();
 
-    httpClient.addResponseModifier((request, response) {
-      printInfo(
-        info: 'Status Code: ${response.statusCode}\n'
-            // 'Data: ${response.bodyString?.toString() ?? ''}',
+    httpClient.addResponseModifier<ApiResponse>((Request request, Response response) {
+      Get.log(
+        'Status Code: ${response.statusCode}, code=${response.body.code ?? ''}, msg=${response.body.msg ?? ''}\n'
+            'Data: ${response.body.data ?? ''}',
       );
       return response;
+    });
+
+    httpClient.addResponseModifier<ApiResponse>((Request request, Response response) {
+      ApiResponse decodedResponse = response.body ?? ApiResponse();
+      if (decodedResponse.code == 1) {
+        return response;
+      } else if (decodedResponse.code == 2008) {
+        request.printError(info: decodedResponse.msg);
+        Get.offNamed('/login');
+      } else {
+        throw Exception(decodedResponse.msg);
+      }
     });
     super.onInit();
   }
@@ -35,13 +48,21 @@ class ApiClient extends GetConnect {
         request.headers['token'] = Storage.getValue('token');
       }
       // request.headers['token'] = '63e6aba8-f7fa-4f1f-b9c9-ab3ee9a8f3d4';
-      printInfo(
-        info: 'REQUEST ║ ${request.method.toUpperCase()}\n'
+      Get.log(
+        'REQUEST ║ ${request.method.toUpperCase()}\n'
             'url: ${request.url}\n'
             'Headers: ${request.headers}\n'
             'Body: ${request.files?.toString() ?? ''}\n',
       );
 
+      return request;
+    });
+  }
+
+  void addAuthenticator (String token) {
+    httpClient.addAuthenticator((Request request) async {
+      // Set the header
+      request.headers['token'] = token;
       return request;
     });
   }
@@ -52,26 +73,18 @@ class ApiClient extends GetConnect {
     }): {};
     var response = await post(uri, formData);
     // print(response.body);
-    var decodedResponse = ApiResponse.fromJson(response.body);
+    var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
-    } else if (decodedResponse.code == 2008) {
-      Get.offNamed('/login');
-    } else {
-      throw Exception(decodedResponse.msg);
     }
   }
 
   Future<dynamic> _get (String uri, { Map<String, dynamic>? params }) async {
     var response = await get(uri, query: params == null ?  params : params.map((key, value) => MapEntry(key, value.toString())));
     // print(response.body);
-    var decodedResponse = ApiResponse.fromJson(response.body);
+    var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
-    } else if (decodedResponse.code == 2008) {
-      Get.offNamed('/login');
-    } else {
-      throw Exception(decodedResponse.msg);
     }
   }
 

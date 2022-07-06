@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/organic_button.dart';
-import 'package:waijudi/widgets/line_button.dart';
-import 'package:waijudi/models/drama.dart';
-import 'package:waijudi/models/line.dart';
 
 class Details extends StatelessWidget {
   const Details({Key? key}) : super(key: key);
@@ -51,47 +48,6 @@ class Details extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Obx(
-                    () => controller.lines.length > 1 ? SizedBox(
-                      height: 35,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 10),
-                        itemCount: controller.lines.length,
-                        itemBuilder: (_, index) {
-                          LineModel line = controller.lines.elementAt(index);
-                          return Obx(() {
-                            return LineButton(
-                              line.name,
-                              () => controller.selectLine(line.vodLineId),
-                              controller.selectedLineId.value == line.vodLineId,
-                            );
-                          });
-                        },
-                      ),
-                    ) : const SizedBox(height: 15),
-                  ),
-                  const SizedBox(height: 15),
-                  Obx(
-                    () => SizedBox(
-                      height: 35,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 10),
-                        itemCount: controller.drama.length,
-                        itemBuilder: (_, index) {
-                          Drama drama = controller.drama.elementAt(index);
-                          return Obx(() {
-                            return LineButton(
-                              drama.dramaName,
-                              () => controller.selectEpisode(index),
-                              controller.selectedDrama.value == index
-                            );
-                          });
-                        },
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 15),
                   Obx(
                     () => Text(
@@ -122,7 +78,7 @@ class Details extends StatelessWidget {
                 ),
                 Expanded(
                   child: OrganicButton(
-                    () => controller.watch(), // play action
+                    () => {}, // play action
                     "Watch",
                     Icons.play_arrow,
                   ),
