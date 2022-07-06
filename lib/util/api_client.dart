@@ -22,7 +22,7 @@ class ApiClient extends GetConnect {
     httpClient.addResponseModifier((request, response) {
       printInfo(
         info: 'Status Code: ${response.statusCode}\n'
-            'Data: ${response.bodyString?.toString() ?? ''}',
+            // 'Data: ${response.bodyString?.toString() ?? ''}',
       );
       return response;
     });
@@ -63,7 +63,7 @@ class ApiClient extends GetConnect {
   }
 
   Future<dynamic> _get (String uri, { Map<String, dynamic>? params }) async {
-    var response = await get(uri, query: params ?? {});
+    var response = await get(uri, query: params == null ?  params : params.map((key, value) => MapEntry(key, value.toString())));
     // print(response.body);
     var decodedResponse = ApiResponse.fromJson(response.body);
     if (decodedResponse.code == 1) {
@@ -103,7 +103,7 @@ class ApiClient extends GetConnect {
       {int page = 1, int pageSize = 20}) async {
     var params = {'name': name, 'page': page, 'pageSize': pageSize};
 
-    return _get('/web/search_home/getHodVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
+    return _post('/web/search_home/getHodVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 
   Future<List<LineModel>> getLine (int id) async {

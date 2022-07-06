@@ -7,6 +7,7 @@ import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/pages/home/widgets/list_categories.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
+import 'package:waijudi/widgets/refresh_header.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -33,13 +34,14 @@ class Home extends GetView<HomeController> {
         ],
       ),
       body: PullToRefreshNotification(
-        color: Colors.blue,
-        pullBackOnRefresh: true,
+        maxDragOffset: 100.0,
+        color: Colors.grey,
+        // pullBackOnRefresh: true,
         onRefresh: onRefresh,
         child: CustomScrollView(
           physics: const AlwaysScrollableClampingScrollPhysics(),
           slivers: <Widget>[
-            PullToRefreshContainer(buildPulltoRefreshImage),
+            RefreshHeader(),
             SliverToBoxAdapter(
               child: ListCategories(),
             ),
@@ -51,10 +53,9 @@ class Home extends GetView<HomeController> {
   }
 
   Widget buildPulltoRefreshImage(PullToRefreshScrollNotificationInfo? info) {
-    final double offset = info?.dragOffset ?? 0.0;
+    var offset = info?.dragOffset ?? 0.0;
     Widget refreshWidget = Container();
-    if (info?.refreshWidget != null &&
-         offset > 18.0) {
+    if (info?.refreshWidget != null && offset > 18.0) {
       refreshWidget = info?.refreshWidget ?? Container();
     }
 
