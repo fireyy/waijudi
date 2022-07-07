@@ -34,7 +34,9 @@ class ApiClient extends GetConnect {
         return response;
       } else if (decodedResponse.code == 2008) {
         request.printError(info: decodedResponse.msg);
-        Get.offNamed('/login');
+        Get.offNamed('/login', parameters: {
+          'callback': Get.routing.current
+        });
       } else {
         throw Exception(decodedResponse.msg);
       }

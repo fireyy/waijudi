@@ -4,6 +4,7 @@ import 'package:waijudi/util/storage.dart';
 
 class LoginController extends GetxController {
   AppController appController = Get.find();
+  final String callback = Get.parameters['callback'] ?? '/';
   final RxBool _passwordVisible = RxBool(false);
   set passwordVisible(bool value) => _passwordVisible.value = value;
   bool get passwordVisible {
@@ -24,7 +25,7 @@ class LoginController extends GetxController {
     if (token != '') {
       await Storage.saveValue('token', token);
       appController.apiClient.addAuthenticator(token);
-      Get.offNamed('/');
+      Get.offNamed(callback);
     }
   }
 }
