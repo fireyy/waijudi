@@ -6,8 +6,7 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/pages/home/widgets/list_categories.dart';
-import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
-import 'package:waijudi/widgets/refresh_header.dart';
+import 'package:waijudi/widgets/pull_to_refresh.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -33,45 +32,22 @@ class Home extends GetView<HomeController> {
           ),
         ],
       ),
-      body: PullToRefreshNotification(
-        maxDragOffset: 100.0,
-        color: Colors.grey,
-        // pullBackOnRefresh: true,
+      body: LiquidPullToRefresh(
+        animSpeedFactor: 1.5,
+        springAnimationDurationInMilliseconds: 500,
         onRefresh: onRefresh,
+        showChildOpacityTransition: false,
+        backgroundColor: AppColors.LIGHT,
+        color: AppColors.SHADOW,
         child: CustomScrollView(
-          physics: const AlwaysScrollableClampingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
-            RefreshHeader(),
             SliverToBoxAdapter(
               child: ListCategories(),
             ),
             ListSections(),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildPulltoRefreshImage(PullToRefreshScrollNotificationInfo? info) {
-    var offset = info?.dragOffset ?? 0.0;
-    Widget refreshWidget = Container();
-    if (info?.refreshWidget != null && offset > 18.0) {
-      refreshWidget = info?.refreshWidget ?? Container();
-    }
-
-    return SliverToBoxAdapter(
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                refreshWidget,
-              ],
-            ),
-          )
-        ],
       ),
     );
   }
