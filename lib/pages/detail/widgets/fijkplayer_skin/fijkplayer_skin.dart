@@ -261,8 +261,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       height: barHeight,
       alignment: Alignment.centerLeft,
       child: IconButton(
-        icon: Icon(Icons.arrow_back),
-        padding: EdgeInsets.only(
+        icon: const Icon(Icons.chevron_left),
+        padding: const EdgeInsets.only(
           left: 10.0,
           right: 10.0,
         ),
@@ -1260,8 +1260,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   // 返回按钮
   Widget _buildTopBackBtn() {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
-      padding: EdgeInsets.only(
+      icon: const Icon(Icons.chevron_left),
+      padding: const EdgeInsets.only(
         left: 10.0,
         right: 10.0,
       ),
