@@ -7,6 +7,7 @@ import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/pages/home/widgets/list_categories.dart';
 import 'package:waijudi/widgets/pull_to_refresh.dart';
+import 'package:waijudi/widgets/search_field.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -21,11 +22,10 @@ class Home extends GetView<HomeController> {
     return Scaffold(
       backgroundColor: AppColors.LIGHT,
       appBar: CustomAppBar(
+        title: SearchField(onTap: () {
+          Get.toNamed('/search');
+        }),
         actions: [
-          CustomAppBarAction(
-            () => Get.toNamed('/search'),
-            Icons.search,
-          ),
           CustomAppBarAction(
             () => Get.toNamed('/list'),
             Icons.filter_list_alt,

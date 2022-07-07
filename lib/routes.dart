@@ -10,7 +10,7 @@ import 'pages/login/index.dart';
 routes() => [
   GetPage(name: "/", page: () => const Home(), bindings: [HomeBinding(),]),
   GetPage(name: "/detail/:id", page: () => const VideoDetail()),
-  GetPage(name: "/search", page: () => const Search()),
+  GetPage(name: "/search", page: () => const Search(), transition: Transition.noTransition),
   GetPage(name: "/list", page: () => const List()),
   GetPage(name: "/login", page: () => const Login()),
 ];

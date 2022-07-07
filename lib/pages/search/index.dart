@@ -4,9 +4,10 @@ import 'package:waijudi/widgets/custom_appbar.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/search/controller.dart';
 import 'package:waijudi/util/colors.dart';
-import 'package:waijudi/pages/search/widgets/search_field.dart';
+import 'package:waijudi/widgets/search_field.dart';
 import 'package:waijudi/widgets/list_video_item.dart';
 import 'package:waijudi/models/videoitem.dart';
+import 'package:waijudi/widgets/appbar_action.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -19,14 +20,13 @@ class Search extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           appBar: CustomAppBar(
-            title: SearchField(onSubmitted: (value) {
-              print('====================$value');
+            title: SearchField(autofocus: true, onSubmitted: (value) {
               controller.search(value);
             }),
             actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('Cancel', style: TextStyle(fontSize: 16, color: Colors.black)),
+              CustomAppBarAction(
+                () => Get.back(),
+                Icons.close,
               ),
             ],
           ),
