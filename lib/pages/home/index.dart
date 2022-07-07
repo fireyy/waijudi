@@ -36,6 +36,8 @@ class Home extends GetView<HomeController> {
       ),
       body: LiquidPullToRefresh(
         animSpeedFactor: 1.5,
+        height: 50,
+        borderWidth: 1,
         springAnimationDurationInMilliseconds: 500,
         onRefresh: onRefresh,
         showChildOpacityTransition: false,

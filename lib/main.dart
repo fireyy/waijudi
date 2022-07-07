@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Waijudi',
       theme: ThemeData(
-        primarySwatch: AppColors.WHITE,
+        primarySwatch: AppColors.DARK,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding: BindingsBuilder(
