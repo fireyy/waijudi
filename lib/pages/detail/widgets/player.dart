@@ -46,6 +46,7 @@ class _PlayerState extends State<Player>
 
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
+  int _tabLength = 0;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -70,19 +71,19 @@ class _PlayerState extends State<Player>
     videoList = controller.videoList;
     // 格式化json转对象
     _videoSourceTabs = VideoSourceFormat.fromJson(videoList);
+    _tabLength = _videoSourceTabs!.video!.length;
     // tabbar初始化
     _tabController = TabController(
-      length: _videoSourceTabs!.video!.length,
+      length: _tabLength,
       vsync: this,
     );
     // 这句不能省，必须有
     speed = 1.0;
   }
 
-  // build 剧集
-  Widget buildPlayDrawer() {
-    return Scaffold(
-      appBar: PreferredSize(
+  PreferredSizeWidget? buildAppBar() {
+    if (_tabLength > 1) {
+      return PreferredSize(
         preferredSize: const Size.fromHeight(24),
         child: AppBar(
           backgroundColor: AppColors.LIGHT,
@@ -98,7 +99,14 @@ class _PlayerState extends State<Player>
             controller: _tabController,
           ),
         ),
-      ),
+      );
+    }
+  }
+
+  // build 剧集
+  Widget buildPlayDrawer() {
+    return Scaffold(
+      appBar: buildAppBar(),
       body: Container(
         color: AppColors.LIGHT,
         child: TabBarView(
@@ -197,7 +205,7 @@ class _PlayerState extends State<Player>
               texturePos: texturePos,
               pageContent: context,
               // 标题 当前页面顶部的标题部分
-              playerTitle: "标题",
+              playerTitle: controller.appController.video.name,
               // 当前视频改变钩子
               onChangeVideo: onChangeVideo,
               // 当前视频源tabIndex
