@@ -21,19 +21,19 @@ class ItemCategories extends StatelessWidget {
           Text(
             category.name,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.DARK.withOpacity(selected ? 1 : 0.3),
+              color: selected ? AppColors.LIGHT_GREEN : AppColors.DARK.withOpacity(0.3),
             ),
           ),
           Visibility(
             visible: selected,
             child: Container(
               margin: const EdgeInsets.only(top: 3),
-              width: 50,
+              width: 32,
               height: 3,
               decoration: BoxDecoration(
-                color: AppColors.LIGHT_GREY,
+                color: AppColors.LIGHT_GREEN,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),

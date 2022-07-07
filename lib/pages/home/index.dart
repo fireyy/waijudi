@@ -31,6 +31,8 @@ class Home extends GetView<HomeController> {
             Icons.filter_list_alt,
           ),
         ],
+        height: 85,
+        bottom: ListCategories()
       ),
       body: LiquidPullToRefresh(
         animSpeedFactor: 1.5,
@@ -40,11 +42,8 @@ class Home extends GetView<HomeController> {
         backgroundColor: AppColors.LIGHT,
         color: AppColors.SHADOW,
         child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: ListCategories(),
-            ),
             ListSections(),
           ],
         ),
