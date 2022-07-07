@@ -1238,6 +1238,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
             left: 0,
             right: 0,
             child: showConfig.bottomPro &&
+                    !widget.player.value.fullScreen &&
                     _hideStuff &&
                     _duration.inMilliseconds != 0
                 ? Container(
