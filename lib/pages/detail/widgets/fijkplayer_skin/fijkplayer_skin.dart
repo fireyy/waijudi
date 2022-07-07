@@ -245,7 +245,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                     _hideLockStuff = true;
                   });
                 },
-                icon: Icon(Icons.lock_open),
+                icon: Icon(Icons.lock),
                 color: Colors.white,
               ),
             ),
@@ -1551,7 +1551,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                                   // 更改 ui显示状态
                                   widget.changeLockState(true);
                                 },
-                                icon: Icon(Icons.lock_outline),
+                                icon: Icon(Icons.lock_open),
                                 color: Colors.white,
                               ),
                             ),
