@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:waijudi/models/line.dart';
-import 'package:waijudi/models/drama.dart';
 
 import 'package:waijudi/controller.dart';
 

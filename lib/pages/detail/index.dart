@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
-import 'widgets/details.dart';
 import 'package:waijudi/pages/detail/widgets/player.dart';
 
 class VideoDetail extends StatelessWidget {
@@ -16,9 +15,8 @@ class VideoDetail extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           body: SingleChildScrollView(
-            child: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : Container()),
+            child: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const Text('loading...')),
           ),
-          // bottomNavigationBar: const Details(),
         );
       },
     );

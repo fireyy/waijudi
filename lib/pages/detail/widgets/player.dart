@@ -109,10 +109,38 @@ class _PlayerState extends State<Player>
       appBar: buildAppBar(),
       body: Container(
         color: AppColors.LIGHT,
-        child: TabBarView(
-          controller: _tabController,
-          children: createTabConList(),
-        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              child: Text(
+                controller.appController.video.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppColors.DARK,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              child: Text(
+                controller.appController.video.vodRemarks,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.DARK,
+                ),
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: createTabConList(),
+              )
+            ),
+          ],
+        )
       ),
     );
   }
@@ -184,46 +212,48 @@ class _PlayerState extends State<Player>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FijkView(
-          height: 260,
-          color: Colors.black,
-          fit: FijkFit.cover,
-          player: player,
-          panelBuilder: (
-            FijkPlayer player,
-            FijkData data,
-            BuildContext context,
-            Size viewSize,
-            Rect texturePos,
-          ) {
-            /// 使用自定义的布局
-            return CustomFijkPanel(
-              player: player,
-              viewSize: viewSize,
-              texturePos: texturePos,
-              pageContent: context,
-              // 标题 当前页面顶部的标题部分
-              playerTitle: controller.appController.video.name,
-              // 当前视频改变钩子
-              onChangeVideo: onChangeVideo,
-              // 当前视频源tabIndex
-              curTabIdx: _curTabIdx,
-              // 当前视频源activeIndex
-              curActiveIdx: _curActiveIdx,
-              // 显示的配置
-              showConfig: vCfg,
-              // json格式化后的视频数据
-              videoFormat: _videoSourceTabs,
-            );
-          },
-        ),
-        SizedBox(
-          height: 300,
-          child: buildPlayDrawer(),
-        ),
-      ],
+    return SafeArea(
+      child: Column(
+        children: [
+          FijkView(
+            height: 260,
+            color: Colors.black,
+            fit: FijkFit.cover,
+            player: player,
+            panelBuilder: (
+              FijkPlayer player,
+              FijkData data,
+              BuildContext context,
+              Size viewSize,
+              Rect texturePos,
+            ) {
+              /// 使用自定义的布局
+              return CustomFijkPanel(
+                player: player,
+                viewSize: viewSize,
+                texturePos: texturePos,
+                pageContent: context,
+                // 标题 当前页面顶部的标题部分
+                playerTitle: controller.appController.video.name,
+                // 当前视频改变钩子
+                onChangeVideo: onChangeVideo,
+                // 当前视频源tabIndex
+                curTabIdx: _curTabIdx,
+                // 当前视频源activeIndex
+                curActiveIdx: _curActiveIdx,
+                // 显示的配置
+                showConfig: vCfg,
+                // json格式化后的视频数据
+                videoFormat: _videoSourceTabs,
+              );
+            },
+          ),
+          SizedBox(
+            height: 300,
+            child: buildPlayDrawer(),
+          ),
+        ],
+      )
     );
   }
 }
