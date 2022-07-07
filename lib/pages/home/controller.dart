@@ -20,7 +20,7 @@ class HomeController extends GetxController {
   loadCategories() async {
     //Load categories
     List<Category> dataCategories = await appController.apiClient.getNavigation();
-    categories.addAll(dataCategories);
+    categories.value = dataCategories;
     await selectCategory(categories.first);
   }
 
