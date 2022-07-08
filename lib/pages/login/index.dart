@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/login/controller.dart';
 import 'package:waijudi/widgets/organic_button.dart';
+import 'package:waijudi/widgets/custom_appbar.dart';
+import 'package:waijudi/widgets/appbar_action.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,6 +14,14 @@ class Login extends StatelessWidget {
       init: LoginController(),
       builder: (controller) {
         return Scaffold(
+          appBar: CustomAppBar(
+            actions: [
+              CustomAppBarAction(
+                () => Get.back(),
+                Icons.close,
+              ),
+            ]
+          ),
           body: Center(
             child: Form(
               autovalidateMode: AutovalidateMode.always,

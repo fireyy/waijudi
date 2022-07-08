@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:waijudi/pages/list/widgets/list_filters.dart';
-import 'package:waijudi/widgets/custom_appbar.dart';
-import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/list/controller.dart';
 import 'package:waijudi/util/colors.dart';
@@ -19,17 +17,24 @@ class List extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
-          appBar: CustomAppBar(
-            title: const Text('List'),
-            leading: CustomAppBarAction(
-              () => Get.back(),
-              Icons.arrow_back,
-            ),
-          ),
           body: CustomScrollView(
             slivers: <Widget>[
-              SliverToBoxAdapter(
-                child: ListFilters(),
+              SliverAppBar(
+                pinned: true,
+                stretch: true,
+                elevation: 0,
+                backgroundColor: AppColors.WHITE,
+                title: Text('List', style: TextStyle(color: AppColors.DARK),),
+                flexibleSpace: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    var top = constraints.biggest.height;
+                      return FlexibleSpaceBar(
+                        expandedTitleScale: 1,
+                        title: top > 71 && top < 91 ?  Text('List, Today') : ListFilters(),
+                      );
+                  }
+                ),
+                expandedHeight: 250,
               ),
               PagedSliverList<int, VideoItem>(
                 pagingController: controller.pagingController,

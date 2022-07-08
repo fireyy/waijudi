@@ -14,9 +14,9 @@ class ListFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return SizedBox(
-        height: (controller.filters.length * 30),
+        height: (controller.filters.length * 33),
         child: ListView.separated(
-          scrollDirection: Axis.vertical,
+          physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 5),
           itemCount: controller.filters.length,
           itemBuilder: (_, index) {
@@ -24,6 +24,8 @@ class ListFilters extends StatelessWidget {
             return SizedBox(
               height: 25,
               child: ListView.separated(
+                shrinkWrap: true,
+                cacheExtent: 25,
                 scrollDirection: Axis.horizontal,
                 separatorBuilder: (BuildContext context, int idx) => const SizedBox(width: 5),
                 itemCount: filterData.list.length,

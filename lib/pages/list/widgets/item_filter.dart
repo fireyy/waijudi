@@ -14,21 +14,17 @@ class ItemFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(0),
-        minimumSize: const Size.fromWidth(30),
-      ),
-      child: Text(
-        filter.name,
-        style: TextStyle(
-          fontSize: 14,
+    // return Text(filter.name);
+    return GestureDetector(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Text(filter.name, style: TextStyle(
+          fontSize: 12,
+          color: selected ? AppColors.GREEN : AppColors.DARK,
           fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-          color: AppColors.DARK.withOpacity(selected ? 1 : 0.6),
-        ),
-      ),
+        )),
+      )
     );
   }
 }
