@@ -1,39 +1,163 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:waijudi/util/utils.dart';
 import 'package:waijudi/models/videoitem.dart';
-import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/video_image.dart';
-import 'package:waijudi/controller.dart';
 
-AppController appController = Get.find();
+class _VideoDescription extends StatelessWidget {
+  const _VideoDescription({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.playcount,
+    required this.score,
+    required this.remarks,
+  }) : super(key: key);
 
-Widget listVideoItem(BuildContext context, VideoItem item, int index) {
-  return GestureDetector(
-    onTap: () {
-      appController.goToDetail(item);
-    },
-    child: ListTile(
-      leading: VideoImage(
-        item.vodPic,
-        width: 60,
-        height: 80,
-        fit: BoxFit.fill,
+  final String title;
+  final String subtitle;
+  final String playcount;
+  final String score;
+  final String remarks;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Padding(padding: EdgeInsets.only(bottom: 2.0)),
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Row(
+                children: [
+                  const Icon(Icons.play_arrow, size: 12, color: Colors.black87),
+                  Text(
+                    playcount,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.favorite, size: 12, color: Colors.black87),
+                  Text(
+                    score,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                remarks,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ListVideoItem extends StatelessWidget {
+  const ListVideoItem({
+    Key? key,
+    required this.thumbnail,
+    required this.title,
+    required this.subtitle,
+    required this.playcount,
+    required this.score,
+    required this.remarks,
+    required this.onTap,
+  }) : super(key: key);
+
+  final String thumbnail;
+  final String title;
+  final String subtitle;
+  final String playcount;
+  final String score;
+  final String remarks;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 2/3,
+                child: VideoImage(
+                  thumbnail,
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 120,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                  child: _VideoDescription(
+                    title: title,
+                    subtitle: subtitle,
+                    playcount: playcount,
+                    score: score,
+                    remarks: remarks,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
-      title: Text(
-        item.name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text(
-        item.vodActor ?? '',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: Text(
-        item.playbackTimes.toString(),
-        style: TextStyle(color: AppColors.LIGHT_GREEN),
-      ),
-      isThreeLine: true,
-    ),
+    );
+  }
+}
+
+Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
+  return ListVideoItem(
+    thumbnail: item.vodPic,
+    title: item.name,
+    subtitle: item.vodActor ?? '',
+    playcount: '${item.playbackTimes}',
+    score: item.vodDoubanScore,
+    remarks: item.vodRemarks,
+    onTap: () => goToDetail(item),
   );
 }

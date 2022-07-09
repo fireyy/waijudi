@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:waijudi/util/utils.dart';
 
 import 'package:waijudi/controller.dart';
 
@@ -14,9 +15,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        appController.goToDetail(item);
-      },
+      onTap: () => goToDetail(item),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.WHITE,

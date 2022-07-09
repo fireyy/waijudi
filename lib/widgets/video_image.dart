@@ -11,7 +11,7 @@ class VideoImage extends StatelessWidget {
     this.image, {
     Key? key,
     this.padding = 0,
-    this.width = 120,
+    this.width = 80,
     this.height = 120,
     this.fit = BoxFit.contain,
   }) : super(key: key);
@@ -23,7 +23,7 @@ class VideoImage extends StatelessWidget {
         : Padding(
             padding: EdgeInsets.all(padding),
             child: CachedNetworkImage(
-                      fit: BoxFit.contain,
+                      fit: fit,
                       alignment: Alignment.topCenter,
                       width: width,
                       height: height,

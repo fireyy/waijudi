@@ -5,6 +5,8 @@ import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/schema.dart' show VideoSourceFormat;
+import 'package:waijudi/models/videoitem.dart';
+import 'package:waijudi/util/storage.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -47,6 +49,7 @@ class _PlayerState extends State<Player>
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
   int _tabLength = 0;
+  late VideoItem videoItem;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -68,6 +71,7 @@ class _PlayerState extends State<Player>
   @override
   void initState() {
     super.initState();
+    videoItem = Storage.getValue('videoItem');
     videoList = controller.videoList;
     // 格式化json转对象
     _videoSourceTabs = VideoSourceFormat.fromJson(videoList);
@@ -115,7 +119,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                controller.appController.video.name,
+                videoItem.name,
                 style: TextStyle(
                   fontSize: 20,
                   color: AppColors.DARK,
@@ -126,7 +130,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                controller.appController.video.vodRemarks,
+                videoItem.vodRemarks,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.DARK,
@@ -234,7 +238,7 @@ class _PlayerState extends State<Player>
                 texturePos: texturePos,
                 pageContent: context,
                 // 标题 当前页面顶部的标题部分
-                playerTitle: controller.appController.video.name,
+                playerTitle: videoItem.name,
                 // 当前视频改变钩子
                 onChangeVideo: onChangeVideo,
                 // 当前视频源tabIndex

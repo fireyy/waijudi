@@ -25,7 +25,10 @@ class Search extends StatelessWidget {
             }),
             actions: [
               CustomAppBarAction(
-                () => Get.back(),
+                () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Get.back();
+                },
                 Icons.close,
               ),
             ],
@@ -35,7 +38,7 @@ class Search extends StatelessWidget {
               PagedSliverList<int, VideoItem>(
                 pagingController: controller.pagingController,
                 builderDelegate: PagedChildBuilderDelegate<VideoItem>(
-                  itemBuilder: listVideoItem,
+                  itemBuilder: listVideoItemBuilder,
                 ),
               ),
             ],

@@ -54,13 +54,13 @@ class List extends StatelessWidget {
                     );
                   }
                 ),
-                expandedHeight: 250,
+                expandedHeight: 240,
                 collapsedHeight: 80,
               ),
               PagedSliverList<int, VideoItem>(
                 pagingController: controller.pagingController,
                 builderDelegate: PagedChildBuilderDelegate<VideoItem>(
-                  itemBuilder: listVideoItem,
+                  itemBuilder: listVideoItemBuilder,
                 ),
               ),
             ],
