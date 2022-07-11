@@ -26,7 +26,10 @@ class Search extends StatelessWidget {
             actions: [
               CustomAppBarAction(
                 () {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
                   Get.back();
                 },
                 Icons.close,
