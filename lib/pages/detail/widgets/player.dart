@@ -41,7 +41,7 @@ class _PlayerState extends State<Player>
     with TickerProviderStateMixin {
   final FijkPlayer player = FijkPlayer();
   final DetailController controller = Get.find();
-  Map<String, List<Map<String, dynamic>>> videoList = {};
+  // Map<String, List<Map<String, dynamic>>> videoList = {};
 
   VideoSourceFormat? _videoSourceTabs;
   late TabController _tabController;
@@ -72,9 +72,9 @@ class _PlayerState extends State<Player>
   void initState() {
     super.initState();
     videoItem = Storage.getValue('videoItem');
-    videoList = controller.videoList;
+    // videoList = controller.videoList;
     // 格式化json转对象
-    _videoSourceTabs = VideoSourceFormat.fromJson(videoList);
+    _videoSourceTabs = VideoSourceFormat.fromJson(controller.videoList);
     _tabLength = _videoSourceTabs!.video!.length;
     // tabbar初始化
     _tabController = TabController(
@@ -138,10 +138,10 @@ class _PlayerState extends State<Player>
               ),
             ),
             Expanded(
-              child: TabBarView(
+              child: _tabLength > 1 ? TabBarView(
                 controller: _tabController,
                 children: createTabConList(),
-              )
+              ) : Column(children: createTabConList(),)
             ),
           ],
         )

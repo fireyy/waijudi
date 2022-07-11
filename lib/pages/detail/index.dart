@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/pages/detail/widgets/player.dart';
+import 'package:waijudi/pages/detail/widgets/skeleton.dart';
 
 class VideoDetail extends StatelessWidget {
   const VideoDetail({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class VideoDetail extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           body: SingleChildScrollView(
-            child: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const Center(child: Text('loading...'),)),
+            child: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const PlayerSkeleton()),
           ),
         );
       },
