@@ -22,6 +22,16 @@ class FilterModel {
 
   FilterModel({this.name = ''});
 
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'list': list.map((d) => d.toJson()).toList(),
+    };
+  }
+  FilterModel.toJson(Map jsonMap)
+    : name = jsonMap['name'].toString(),
+      list = (jsonMap['list'] as List).map((d) => Filter.fromJson(d)).toList();
+
   FilterModel.fromJson(Map jsonMap)
     : name = jsonMap['name'].toString(),
       list = (jsonMap['list'] as List).map((d) => Filter.fromJson(d)).toList();

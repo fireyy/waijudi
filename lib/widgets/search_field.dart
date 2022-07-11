@@ -19,6 +19,7 @@ class SearchField extends StatelessWidget {
       child: TextField(
         showCursor: autofocus,
         autofocus: autofocus ?? false,
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           filled: true,
           fillColor: AppColors.SHADOW,

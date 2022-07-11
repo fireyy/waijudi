@@ -119,11 +119,31 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                videoItem.name,
+                '${videoItem.name}(${videoItem.vodDoubanScore})',
                 style: TextStyle(
                   fontSize: 20,
                   color: AppColors.DARK,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              child: Text(
+                videoItem.vodSub,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.DARK,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              child: Text(
+                videoItem.vodActor ?? '',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.DARK,
                 ),
               ),
             ),
@@ -141,7 +161,7 @@ class _PlayerState extends State<Player>
               child: _tabLength > 1 ? TabBarView(
                 controller: _tabController,
                 children: createTabConList(),
-              ) : Column(children: createTabConList(),)
+              ) : ListView(children: createTabConList(),)
             ),
           ],
         )
@@ -169,8 +189,8 @@ class _PlayerState extends State<Player>
               elevation: MaterialStateProperty.all(0),
               backgroundColor: MaterialStateProperty.all(
                   tabIdx == _curTabIdx && activeIdx == _curActiveIdx
-                      ? Colors.red
-                      : Colors.blue),
+                      ? AppColors.LIGHT_GREEN
+                      : AppColors.LIGHT_GREY),
             ),
             onPressed: () async {
               setState(() {
@@ -253,7 +273,7 @@ class _PlayerState extends State<Player>
             },
           ),
           SizedBox(
-            height: 300,
+            height: 280,
             child: buildPlayDrawer(),
           ),
         ],

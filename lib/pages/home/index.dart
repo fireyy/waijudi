@@ -36,6 +36,7 @@ class Home extends GetView<HomeController> {
       ),
       body: EasyRefresh(
         refreshOnStart: true,
+        noMoreLoad: true,
         onRefresh: () async {
           await controller.loadCategories();
           return IndicatorResult.success;

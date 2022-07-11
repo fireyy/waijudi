@@ -177,13 +177,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.1"
-  infinite_scroll_pagination:
-    dependency: "direct main"
-    description:
-      name: infinite_scroll_pagination
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.2.0"
   js:
     dependency: transitive
     description:
@@ -336,13 +329,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliver_tools:
-    dependency: transitive
-    description:
-      name: sliver_tools
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.7"
   source_span:
     dependency: transitive
     description:

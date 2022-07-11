@@ -6,8 +6,13 @@ import 'package:get/get.dart';
 // FIXME: Storage init
 
 void main() async {
-  Get.put(ApiClient());
-  ApiClient apiClient = Get.find();
+  late ApiClient apiClient;
+
+  setUp(() async {
+    await GetStorage.init();
+    Get.put(ApiClient());
+    apiClient = Get.find();
+  });
   test('api_client getVideo test', () async {
     var result = await apiClient.getVideo();
     expect(result.data[0].name, '猜你喜欢');

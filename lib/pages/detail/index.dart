@@ -15,9 +15,7 @@ class VideoDetail extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
-          body: SingleChildScrollView(
-            child: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const PlayerSkeleton()),
-          ),
+          body: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const PlayerSkeleton()),
         );
       },
     );

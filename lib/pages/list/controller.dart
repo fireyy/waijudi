@@ -1,45 +1,57 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/controller.dart';
 import 'package:waijudi/models/videoitem.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:waijudi/models/filter.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+import 'package:waijudi/util/storage.dart';
 
 class ListController extends GetxController {
   AppController appController = Get.find();
-  final PagingController<int, VideoItem> _pagingController =
-      PagingController(firstPageKey: 1);
-  PagingController<int, VideoItem> get pagingController => _pagingController;
+  final RxList<VideoItem> searchResults = RxList<VideoItem>([]);
+  final EasyRefreshController loadController = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
   Rx<FilterParams> filterParams = Rx<FilterParams>(FilterParams());
   RxList<FilterModel> filters = RxList<FilterModel>([]);
   RxMap<String, dynamic> filterMap = RxMap<String, dynamic>();
+  bool isInitialized = true;
+  RxBool isLoading = false.obs;
+  final ScrollController scrollController = ScrollController();
 
   ListController() {
     getType();
-    _pagingController.addPageRequestListener((pageKey) {
-      searchByFilter(pageKey);
-    });
   }
 
   getType () async {
-    filters.value = await appController.apiClient.getType();
+    if (Storage.hasData('filterType')) {
+      filters.value = (Storage.getValue('filterType') as List).map((d) => FilterModel.fromJson(d)).toList();
+    } else {
+      filters.value = await appController.apiClient.getType();
+      Storage.saveValue('filterType', filters.toJson());
+    }
     for (var filter in filters) {
       filterMap.addAll({
         filter.name: filter.list.first.id
       });
     }
+    searchByFilter();
   }
 
-  searchByFilter (pageKey) async {
-    print('====================searchByFilter: $pageKey, ${filterParams.value}');
-    filterParams.value.page = pageKey;
+  searchByFilter () async {
+    print('====================searchByFilter: ${filterParams.value.page}, ${filterParams.value}');
+    if (isInitialized) isLoading.value = true;
     var result = await appController.apiClient.searchByFilter(filterParams.value);
-    final isLastPage = result.currentPage == result.lastPage;
-    if (isLastPage) {
-      _pagingController.appendLastPage(result.data);
+    filterParams.value.page = filterParams.value.page + 1;
+    searchResults.addAll(result.data);
+    final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
+    if (!isInitialized) {
+      loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
     } else {
-      final nextPageKey = result.currentPage + 1;
-      _pagingController.appendPage(result.data, nextPageKey);
+      isInitialized = false;
     }
+    isLoading.value = false;
   }
 
   filter (Map<String, dynamic> data) async {
@@ -51,14 +63,23 @@ class ListController extends GetxController {
     };
     filterParams.value = FilterParams.fromJson({
       ...params,
-      ...data
+      ...data,
+      'page': 1,
     });
-    _pagingController.refresh();
+    searchResults.clear();
+    loadController.resetFooter();
+    isInitialized = true;
+    searchByFilter();
+  }
+
+  goToTop () {
+    scrollController.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   @override
   void onClose() {
-    _pagingController.dispose();
+    loadController.dispose();
+    scrollController.dispose();
     super.onClose();
   }
 }
