@@ -426,7 +426,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                         showConfig.stateAuto && !widget.player.value.fullScreen
                             ? barFillingHeight
                             : barHeight,
-                    alignment: Alignment.bottomLeft,
+                    alignment: Alignment.topLeft,
                     child: Container(
                       height: barHeight,
                       child: Row(
