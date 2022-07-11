@@ -50,7 +50,8 @@ class List extends StatelessWidget {
                     return FlexibleSpaceBar(
                       expandedTitleScale: 1,
                       titlePadding: const EdgeInsets.only(top: 60),
-                      title: top > 91 && top < 111 ? Padding(padding: const EdgeInsets.only(bottom: 5), child: Text(filterName.join('·'), style: TextStyle(fontSize: 14, color: AppColors.DARK))) : ListFilters(),
+                      title: top > 91 && top < 131 ? Padding(padding: const EdgeInsets.only(bottom: 5), child: Text(filterName.join('·'), style: TextStyle(fontSize: 14, color: AppColors.DARK))) : ListFilters(),
+                      // Text('$top', style: TextStyle(fontSize: 14, color: AppColors.DARK)),
                     );
                   }
                 ),

@@ -14,7 +14,7 @@ class ListFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return SizedBox(
-        height: (controller.filters.length * 33),
+        height: (controller.filters.length * 38),
         child: ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 5),
