@@ -23,12 +23,13 @@ class VideoImage extends StatelessWidget {
         : Padding(
             padding: EdgeInsets.all(padding),
             child: CachedNetworkImage(
-                      fit: fit,
-                      alignment: Alignment.topCenter,
-                      width: width,
-                      height: height,
-                      imageUrl: image.replaceFirst('http://', 'https://'),
-                    ),
+              fit: fit,
+              alignment: Alignment.topCenter,
+              width: width,
+              height: height,
+              imageUrl: image.replaceFirst('http://', 'https://'),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           );
   }
 }

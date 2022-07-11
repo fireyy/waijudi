@@ -25,6 +25,7 @@ class _VideoDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -39,7 +40,7 @@ class _VideoDescription extends StatelessWidget {
               const Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Text(
                 subtitle,
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 12.0,
@@ -67,7 +68,7 @@ class _VideoDescription extends StatelessWidget {
                   const SizedBox(width: 10),
                   const Icon(Icons.favorite, size: 12, color: Colors.black87),
                   Text(
-                    score,
+                    score != '' ? score : '-',
                     style: const TextStyle(
                       fontSize: 12.0,
                       color: Colors.black87,
@@ -117,7 +118,7 @@ class ListVideoItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         child: SizedBox(
-          height: 100,
+          height: 120,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -154,7 +155,7 @@ Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
   return ListVideoItem(
     thumbnail: item.vodPic,
     title: item.name,
-    subtitle: item.vodActor ?? '',
+    subtitle: item.vodSub != '' ? item.vodSub : item.vodActor ?? '',
     playcount: '${item.playbackTimes}',
     score: item.vodDoubanScore,
     remarks: item.vodRemarks,
