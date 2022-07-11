@@ -6,8 +6,8 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/pages/home/widgets/list_categories.dart';
-import 'package:waijudi/widgets/pull_to_refresh.dart';
 import 'package:waijudi/widgets/search_field.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -34,18 +34,14 @@ class Home extends GetView<HomeController> {
         height: 85,
         bottom: ListCategories()
       ),
-      body: LiquidPullToRefresh(
-        animSpeedFactor: 1.5,
-        height: 50,
-        borderWidth: 1,
-        springAnimationDurationInMilliseconds: 500,
-        onRefresh: onRefresh,
-        showChildOpacityTransition: false,
-        backgroundColor: AppColors.LIGHT,
-        color: AppColors.SHADOW,
+      body: EasyRefresh(
+        refreshOnStart: true,
+        onRefresh: () async {
+          await controller.loadCategories();
+          return IndicatorResult.success;
+        },
         child: CustomScrollView(
-          physics: const ClampingScrollPhysics(),
-          slivers: <Widget>[
+          slivers: [
             ListSections(),
           ],
         ),

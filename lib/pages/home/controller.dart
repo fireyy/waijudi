@@ -3,6 +3,7 @@ import 'package:waijudi/controller.dart';
 import 'package:waijudi/models/category.dart';
 import 'package:waijudi/models/section.dart';
 import 'package:waijudi/models/searchresult.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 
 class HomeController extends GetxController {
   AppController appController = Get.find();
@@ -28,5 +29,10 @@ class HomeController extends GetxController {
     _selectedCategory.value = category;
     SearchResult results = await appController.apiClient.getVideo(category: category.id);
     homeData.value = results.data;
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }
