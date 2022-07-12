@@ -12,5 +12,5 @@ routes() => [
   GetPage(name: "/detail/:id", page: () => const VideoDetail()),
   GetPage(name: "/search", page: () => const Search(), transition: Transition.noTransition),
   GetPage(name: "/list", page: () => const List()),
-  GetPage(name: "/login", page: () => const Login()),
+  GetPage(name: "/login", page: () => Login()),
 ];
