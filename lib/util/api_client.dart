@@ -9,8 +9,10 @@ import 'package:waijudi/models/line.dart';
 import 'package:waijudi/models/drama.dart';
 import 'package:waijudi/models/filter.dart';
 import 'package:waijudi/util/storage.dart';
+import 'package:waijudi/models/video_detail.dart';
 
 class ApiClient extends GetConnect {
+  String token = '';
   @override
   void onInit() {
     httpClient.defaultDecoder = (json) => ApiResponse.fromJson(json);
@@ -18,7 +20,20 @@ class ApiClient extends GetConnect {
     httpClient.defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
     httpClient.timeout = const Duration(seconds: 15);
 
-    addRequestModifier();
+    if (Storage.hasData('token')) {
+      token = Storage.token;
+    }
+
+    httpClient.addRequestModifier<dynamic>((request) {
+      Get.log(
+        'REQUEST ║ ${request.method.toUpperCase()}\n'
+            'url: ${request.url}\n'
+            'Headers: ${request.headers}\n'
+            'Body: ${request.files?.toString() ?? ''}\n',
+      );
+
+      return request;
+    });
 
     httpClient.addResponseModifier<ApiResponse>((Request request, Response response) {
       Get.log(
@@ -44,36 +59,17 @@ class ApiClient extends GetConnect {
     super.onInit();
   }
 
-  void addRequestModifier() {
-    httpClient.addRequestModifier<dynamic>((request) {
-      if (Storage.hasData('token')) {
-        request.headers['token'] = Storage.getValue('token');
-      }
-      // request.headers['token'] = '63e6aba8-f7fa-4f1f-b9c9-ab3ee9a8f3d4';
-      Get.log(
-        'REQUEST ║ ${request.method.toUpperCase()}\n'
-            'url: ${request.url}\n'
-            'Headers: ${request.headers}\n'
-            'Body: ${request.files?.toString() ?? ''}\n',
-      );
-
-      return request;
-    });
-  }
-
-  void addAuthenticator (String token) {
-    httpClient.addAuthenticator((Request request) async {
-      // Set the header
-      request.headers['token'] = token;
-      return request;
-    });
+  void addAuthToken (String t) {
+    token = t;
   }
 
   Future<dynamic> _post (String uri, { Map? params }) async {
     final formData = params != null ? FormData({
       'params': sign(params),
     }): {};
-    var response = await post(uri, formData);
+    var response = await post(uri, formData, headers: {
+      'token': token,
+    });
     // print(response.body);
     var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
@@ -82,7 +78,9 @@ class ApiClient extends GetConnect {
   }
 
   Future<dynamic> _get (String uri, { Map<String, dynamic>? params }) async {
-    var response = await get(uri, query: params == null ?  params : params.map((key, value) => MapEntry(key, value.toString())));
+    var response = await get(uri, query: params == null ?  params : params.map((key, value) => MapEntry(key, value.toString())), headers: {
+      'token': token,
+    });
     // print(response.body);
     var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
@@ -95,6 +93,12 @@ class ApiClient extends GetConnect {
     var params = {'type_id': category, 'page': page, 'pageSize': pageSize};
 
     return _post('/web/video_home/getVideo', params: params).then((data) => SearchResult.fromJson(data));
+  }
+
+  Future<VideoDetail> getVideoById (int videoId) async {
+    var params = {'id': videoId, 'page': 0, 'pageSize': 99};
+
+    return _post('/web/video_home/getVideo', params: params).then((data) => VideoDetail.fromJson(data));
   }
 
   Future<List<Category>> getNavigation () async {
@@ -140,7 +144,20 @@ class ApiClient extends GetConnect {
     var params = {'mobile': mobile, 'password': password, 'ip': ''};
     return _post('/web/user/login', params: params).then((data) => data['token']);
   }
-  // /web/user/login params=k3xm7yaxQdeyJpcCI6IjguMjE5LjEzMi4xMTEiLCJtb2JpbGUiOiIxODkxNzU2NjgyOSIsInBhc3N3b3JkIjoiemh1YW5sIn0=
-  // /web/user_info/personalCenter
-  // /web/user_info/playbackRecord
+
+  Future<SearchResultWithPlayback> getPlaybackRecord (int page) async {
+    var params = {'page': page, 'pageSize': 20};
+    return _post('/web/user_info/playbackRecord', params: params).then((data) => data['log']).then((data) => SearchResultWithPlayback.fromJson(data));
+  }
+  // {"vod_line_id":15,"vod_time":3702.491,"vod_id":21007,"drama_id":"%E7%AC%AC01%E9%9B%86","vod_timed":6.9092216400000002}
+  Future<dynamic> addPlaybackRecord (Map<String, dynamic> params) async {
+    return _post('/web/user_info/addPlaybackRecord', params: params);
+  }
+
+  Future<dynamic> delPlaybackRecord (String ids) async {
+    var params = {'id': ids};
+    return _post('/web/user_info/delPlaybackRecord', params: params);
+  }
+  // /web/user_info/delPlaybackRecord, {"id":"3515116,3563013"}
+  // /web/common/getUrl, data: [{"value":"https:\/\/waijudi.ywhuilong.com"},{"value":"https:\/\/api.yaocaoshiyu.com"},{"value":"https:\/\/wjapi.zhongxinlianmin.com"}]
 }

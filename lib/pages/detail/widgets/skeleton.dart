@@ -8,7 +8,7 @@ class PlayerSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VideoItem videoItem = Storage.getValue('videoItem');
+    var videoName = Storage.videoName;
   
     return SafeArea(
       child: Column(
@@ -21,7 +21,7 @@ class PlayerSkeleton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
             child: Text(
-              videoItem.name,
+              videoName,
               style: TextStyle(
                 fontSize: 20,
                 color: AppColors.DARK,

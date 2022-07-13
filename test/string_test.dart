@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:waijudi/util/utils.dart';
+import 'package:waijudi/util/string.dart';
 
 void main() {
   test('camelCase test', () {

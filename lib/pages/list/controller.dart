@@ -26,10 +26,10 @@ class ListController extends GetxController {
 
   getType () async {
     if (Storage.hasData('filterType')) {
-      filters.value = (Storage.getValue('filterType') as List).map((d) => FilterModel.fromJson(d)).toList();
+      filters.value = Storage.getFilter();
     } else {
       filters.value = await appController.apiClient.getType();
-      Storage.saveValue('filterType', filters.toJson());
+      await Storage.saveFilter(filters);
     }
     for (var filter in filters) {
       filterMap.addAll({

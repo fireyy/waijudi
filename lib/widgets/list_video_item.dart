@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waijudi/util/utils.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/video_image.dart';
+import 'package:waijudi/models/playback.dart';
 
 class _VideoDescription extends StatelessWidget {
   const _VideoDescription({
@@ -55,7 +56,7 @@ class _VideoDescription extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Row(
+              playcount != '' ? Row(
                 children: [
                   const Icon(Icons.play_arrow, size: 12, color: Colors.black87),
                   Text(
@@ -75,7 +76,7 @@ class _VideoDescription extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              ) : const SizedBox(),
               Text(
                 remarks,
                 style: const TextStyle(
@@ -92,8 +93,9 @@ class _VideoDescription extends StatelessWidget {
 }
 
 class ListVideoItem extends StatelessWidget {
-  const ListVideoItem({
+  ListVideoItem({
     Key? key,
+    required this.id,
     required this.thumbnail,
     required this.title,
     required this.subtitle,
@@ -101,8 +103,12 @@ class ListVideoItem extends StatelessWidget {
     required this.score,
     required this.remarks,
     required this.onTap,
+    this.onChecked,
+    this.isChecked = false,
+    this.isShowCheckbox = false,
   }) : super(key: key);
 
+  final int id;
   final String thumbnail;
   final String title;
   final String subtitle;
@@ -110,6 +116,9 @@ class ListVideoItem extends StatelessWidget {
   final String score;
   final String remarks;
   final VoidCallback onTap;
+  final void Function(int, bool)? onChecked;
+  final bool isChecked;
+  final bool isShowCheckbox;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +131,12 @@ class ListVideoItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              isShowCheckbox ? Checkbox(
+                value: isChecked,
+                onChanged: (bool? newValue) {
+                  if (onChecked is Function) onChecked!(id, newValue!);
+                },
+              ) : const SizedBox(),
               AspectRatio(
                 aspectRatio: 2/3,
                 child: VideoImage(
@@ -153,12 +168,35 @@ class ListVideoItem extends StatelessWidget {
 
 Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
   return ListVideoItem(
+    id: item.id,
     thumbnail: item.vodPic,
     title: item.name,
     subtitle: item.vodSub != '' ? item.vodSub : item.vodActor ?? '',
     playcount: '${item.playbackTimes}',
     score: item.vodDoubanScore,
     remarks: item.vodRemarks,
-    onTap: () => goToDetail(item),
+    onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
+  );
+}
+
+Widget listPlaybackBuilder(BuildContext context, Playback item, int index) {
+  return ListVideoItem(
+    id: item.id,
+    thumbnail: item.videoPic,
+    title: item.videoName,
+    subtitle: 'Updated: ${item.updatetime}\n${item.vodRemarks}',
+    playcount: '',
+    score: '${item.proportion}',
+    remarks: '${item.dramaId}, watched ${(item.vodTimed/item.vodTime*100).floor()}%',
+    onTap: () {
+      goToDetail(item.videoName, {
+        'id': '${item.id}',
+        'vodId': '${item.vodId}',
+        '': '${item.vodLineId}',
+      });
+    },
+    onChecked: (id, value) {},
+    isChecked: true,
+    isShowCheckbox: true,
   );
 }

@@ -26,8 +26,8 @@ class LoginController extends GetxController {
       isLoading.value = true;
       final token = await appController.apiClient.login(_mobile.value, _password.value);
       if (token != '') {
-        await Storage.saveValue('token', token);
-        appController.apiClient.addAuthenticator(token);
+        await Storage.saveToken(token);
+        appController.apiClient.addAuthToken(token);
         Get.offNamed(callback);
       }
     }

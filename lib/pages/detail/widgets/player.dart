@@ -5,8 +5,8 @@ import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/schema.dart' show VideoSourceFormat;
-import 'package:waijudi/models/videoitem.dart';
-import 'package:waijudi/util/storage.dart';
+import 'package:waijudi/models/video_detail.dart';
+import 'package:waijudi/util/time.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -49,7 +49,7 @@ class _PlayerState extends State<Player>
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
   int _tabLength = 0;
-  late VideoItem videoItem;
+  late VideoDetail videoDetail;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -71,7 +71,7 @@ class _PlayerState extends State<Player>
   @override
   void initState() {
     super.initState();
-    videoItem = Storage.getValue('videoItem');
+    videoDetail = controller.videoDetail.value;
     // videoList = controller.videoList;
     // 格式化json转对象
     _videoSourceTabs = VideoSourceFormat.fromJson(controller.videoList);
@@ -119,7 +119,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                '${videoItem.name}(${videoItem.vodDoubanScore})',
+                '${videoDetail.name}(${videoDetail.vodDoubanScore})',
                 style: TextStyle(
                   fontSize: 20,
                   color: AppColors.DARK,
@@ -130,7 +130,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                videoItem.vodSub,
+                videoDetail.vodSub,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.DARK,
@@ -140,7 +140,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                videoItem.vodActor ?? '',
+                videoDetail.vodActor,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.DARK,
@@ -150,7 +150,7 @@ class _PlayerState extends State<Player>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
-                videoItem.vodRemarks,
+                videoDetail.vodRemarks,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.DARK,
@@ -244,6 +244,18 @@ class _PlayerState extends State<Player>
             color: Colors.black,
             fit: FijkFit.cover,
             player: player,
+            onDispose: (FijkData? data) {
+              var params = {
+                "vod_line_id": videoDetail.vodLineId,
+                "vod_time": timeToSecond(player.value.duration),
+                "vod_id": videoDetail.id,
+                "drama_id": Uri.encodeComponent(videoDetail.dramaId),
+                "vod_timed": timeToSecond(player.currentPos),
+              };
+              if (player.currentPos.inMicroseconds > 0) {
+                controller.addPlaybackRecord(params);
+              }
+            },
             panelBuilder: (
               FijkPlayer player,
               FijkData data,
@@ -258,7 +270,7 @@ class _PlayerState extends State<Player>
                 texturePos: texturePos,
                 pageContent: context,
                 // 标题 当前页面顶部的标题部分
-                playerTitle: videoItem.name,
+                playerTitle: videoDetail.name,
                 // 当前视频改变钩子
                 onChangeVideo: onChangeVideo,
                 // 当前视频源tabIndex

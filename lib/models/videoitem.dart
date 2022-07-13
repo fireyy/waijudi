@@ -25,6 +25,22 @@ class VideoItem {
     this.vodActor,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type_id': typeId,
+      'name': name,
+      'vod_sub': vodSub,
+      'is_vip': isVip,
+      'playback_times': playbackTimes,
+      'vod_pic': vodPic,
+      'vod_douban_score': vodDoubanScore,
+      'vod_remarks': vodRemarks,
+      'vod_blurb': vodBlurb,
+      'vod_actor': vodActor,
+    };
+  }
+
   VideoItem.fromJson(Map jsonMap)
     : id = jsonMap['id'].toInt(),
       typeId = jsonMap['type_id'].toInt(),

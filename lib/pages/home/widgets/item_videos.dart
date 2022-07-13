@@ -15,7 +15,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => goToDetail(item),
+      onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.WHITE,

@@ -47,6 +47,11 @@ class Home extends GetView<HomeController> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed('/history'),
+        backgroundColor: AppColors.LIGHT_GREEN,
+        child: Icon(Icons.access_time, color: AppColors.LIGHT),
+      ),
     );
   }
 }

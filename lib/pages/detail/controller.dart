@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-
+import 'package:waijudi/models/video_detail.dart';
 import 'package:waijudi/controller.dart';
 
 class DetailController extends GetxController {
@@ -9,6 +9,7 @@ class DetailController extends GetxController {
     "video": []
   });
   RxList<Map<String, dynamic>> list = RxList<Map<String, dynamic>>([]);
+  Rx<VideoDetail> videoDetail = Rx<VideoDetail>(VideoDetail());
   
   DetailController() {
     loadVideo();
@@ -20,6 +21,8 @@ class DetailController extends GetxController {
 
   loadVideo() async {
     try {
+      var result = await appController.apiClient.getVideoById(videoId);
+      videoDetail.value = result;
       var lines = await appController.apiClient.getLine(videoId);
       for (var line in lines) {
         var drama = await appController.apiClient.getDramaDetail(id: videoId, lineId: line.vodLineId);
@@ -36,5 +39,9 @@ class DetailController extends GetxController {
     } catch (error) {
       Get.log(error.toString());
     }
+  }
+
+  void addPlaybackRecord (Map<String, dynamic> params) {
+    appController.apiClient.addPlaybackRecord(params);
   }
 }
