@@ -40,18 +40,15 @@ class ApiClient extends GetConnect {
         'Status Code: ${response.statusCode}, code=${response.body.code ?? ''}, msg=${response.body.msg ?? ''}\n'
             'Data: ${response.body.data ?? ''}',
       );
-      return response;
-    });
-
-    httpClient.addResponseModifier<ApiResponse>((Request request, Response response) {
       ApiResponse decodedResponse = response.body ?? ApiResponse();
       if (decodedResponse.code == 1) {
         return response;
       } else if (decodedResponse.code == 2008) {
-        request.printError(info: decodedResponse.msg);
+        // request.printError(info: decodedResponse.msg);
         Get.offNamed('/login', parameters: {
           'callback': Get.routing.current
         });
+        return response;
       } else {
         throw Exception(decodedResponse.msg);
       }
@@ -74,6 +71,9 @@ class ApiClient extends GetConnect {
     var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
+    } else {
+      Get.snackbar('Hi', decodedResponse.msg);
+      throw Exception(decodedResponse.msg);
     }
   }
 
@@ -85,6 +85,9 @@ class ApiClient extends GetConnect {
     var decodedResponse = response.body;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
+    } else {
+      Get.snackbar('Hi', decodedResponse.msg);
+      throw Exception(decodedResponse.msg);
     }
   }
 

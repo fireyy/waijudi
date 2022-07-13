@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:waijudi/util/utils.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/video_image.dart';
-import 'package:waijudi/models/playback.dart';
 
 class _VideoDescription extends StatelessWidget {
   const _VideoDescription({
@@ -176,27 +175,5 @@ Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
     score: item.vodDoubanScore,
     remarks: item.vodRemarks,
     onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
-  );
-}
-
-Widget listPlaybackBuilder(BuildContext context, Playback item, int index) {
-  return ListVideoItem(
-    id: item.id,
-    thumbnail: item.videoPic,
-    title: item.videoName,
-    subtitle: 'Updated: ${item.updatetime}\n${item.vodRemarks}',
-    playcount: '',
-    score: '${item.proportion}',
-    remarks: '${item.dramaId}, watched ${(item.vodTimed/item.vodTime*100).floor()}%',
-    onTap: () {
-      goToDetail(item.videoName, {
-        'id': '${item.id}',
-        'vodId': '${item.vodId}',
-        '': '${item.vodLineId}',
-      });
-    },
-    onChecked: (id, value) {},
-    isChecked: true,
-    isShowCheckbox: true,
   );
 }

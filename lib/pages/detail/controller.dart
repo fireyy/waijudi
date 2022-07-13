@@ -21,9 +21,9 @@ class DetailController extends GetxController {
 
   loadVideo() async {
     try {
+      var lines = await appController.apiClient.getLine(videoId);
       var result = await appController.apiClient.getVideoById(videoId);
       videoDetail.value = result;
-      var lines = await appController.apiClient.getLine(videoId);
       for (var line in lines) {
         var drama = await appController.apiClient.getDramaDetail(id: videoId, lineId: line.vodLineId);
         var dUrl = await getVodDecrypt(drama.first.vodDramaUrl);

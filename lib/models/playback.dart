@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Playback {
   int vodId;
   String dramaId;
@@ -43,4 +45,16 @@ class Playback {
       videoPic = jsonMap['video_pic'].toString(),
       vodRemarks = jsonMap['vod_remarks'].toString(),
       proportion = jsonMap['proportion'].toInt();
+}
+
+class CheckboxParams {
+  void Function(int, bool) onChecked;
+  bool isChecked;
+  bool isShowCheckbox;
+  
+  CheckboxParams({
+    required this.onChecked,
+    this.isChecked = false,
+    this.isShowCheckbox = false,
+  });
 }

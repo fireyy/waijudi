@@ -1291,7 +1291,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
         height: showConfig.stateAuto && !widget.player.value.fullScreen
             ? barFillingHeight
             : barHeight,
-        alignment: Alignment.bottomLeft,
+        alignment: Alignment.topLeft,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         },
       ),
       initialRoute: isLogin ? "/" : '/login',
-      getPages: routes(),
+      getPages: AppPages.routes,
     );
   }
 }
