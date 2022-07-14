@@ -48,8 +48,10 @@ class _PlayerState extends State<Player>
 
   int _curTabIdx = 0;
   int _curActiveIdx = 0;
+  int _seekPos = 0;
   int _tabLength = 0;
   late VideoDetail videoDetail;
+  bool _showSeekTip = false;
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -83,6 +85,13 @@ class _PlayerState extends State<Player>
     );
     // 这句不能省，必须有
     speed = 1.0;
+    // 如果是续播，则尝试回到上次的状态
+    if (videoDetail.vodTimed > 0 && videoDetail.dramaId != controller.videoList['video']![0]['list'][0]['name']) {
+      _curTabIdx = controller.lineList.indexWhere((line) => line.vodLineId == videoDetail.vodLineId);
+      _curActiveIdx = controller.videoList['video']![_curTabIdx]['list']!.indexWhere((item) => item['name'] == videoDetail.dramaId);
+    }
+    _seekPos = videoDetail.vodTimed;
+    _showSeekTip = _seekPos > 0;
   }
 
   PreferredSizeWidget? buildAppBar() {
@@ -192,23 +201,7 @@ class _PlayerState extends State<Player>
                       ? AppColors.LIGHT_GREEN
                       : AppColors.LIGHT_GREY),
             ),
-            onPressed: () async {
-              setState(() {
-                _curTabIdx = tabIdx;
-                _curActiveIdx = activeIdx;
-              });
-              String nextVideoUrl =
-                  _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.url!;
-              String nextDecVideoUrl = await controller.getVodDecrypt(nextVideoUrl);
-              // 切换播放源
-              // 如果不是自动开始播放，那么先执行stop
-              if (player.value.state == FijkState.completed) {
-                await player.stop();
-              }
-              await player.reset().then((_) async {
-                player.setDataSource(nextDecVideoUrl, autoPlay: true);
-              });
-            },
+            onPressed: () => _selectToPlay(tabIdx, activeIdx),
             child: Text(
               _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.name!,
               style: const TextStyle(
@@ -245,11 +238,12 @@ class _PlayerState extends State<Player>
             fit: FijkFit.cover,
             player: player,
             onDispose: (FijkData? data) {
+              String currentDramaId = _videoSourceTabs!.video![_curTabIdx]!.list![_curActiveIdx]!.name!;
               var params = {
                 "vod_line_id": videoDetail.vodLineId,
                 "vod_time": timeToSecond(player.value.duration),
                 "vod_id": videoDetail.id,
-                "drama_id": Uri.encodeComponent(videoDetail.dramaId),
+                "drama_id": Uri.encodeComponent(currentDramaId),
                 "vod_timed": timeToSecond(player.currentPos),
               };
               if (player.currentPos.inMicroseconds > 0) {
@@ -270,13 +264,15 @@ class _PlayerState extends State<Player>
                 texturePos: texturePos,
                 pageContent: context,
                 // 标题 当前页面顶部的标题部分
-                playerTitle: videoDetail.name,
+                playerTitle: '${videoDetail.name}($_seekPos)',
                 // 当前视频改变钩子
                 onChangeVideo: onChangeVideo,
                 // 当前视频源tabIndex
                 curTabIdx: _curTabIdx,
                 // 当前视频源activeIndex
                 curActiveIdx: _curActiveIdx,
+                // 历史视频播放进度
+                seekPos: _seekPos,
                 // 显示的配置
                 showConfig: vCfg,
                 // json格式化后的视频数据
@@ -284,6 +280,24 @@ class _PlayerState extends State<Player>
               );
             },
           ),
+          _showSeekTip ? GestureDetector(
+            onTap: () {
+              player.seekTo(_seekPos*1000);
+              setState(() {
+                _showSeekTip = false;
+              });
+            },
+            child: Container(
+              color: Colors.green[100],
+              padding: const EdgeInsets.all(10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Seek To Latest Position ${Duration(seconds: _seekPos).toString().split(".")[0]}',
+                ),
+              ),
+            ),
+          ) : Container(),
           SizedBox(
             height: 280,
             child: buildPlayDrawer(),
@@ -291,5 +305,23 @@ class _PlayerState extends State<Player>
         ],
       )
     );
+  }
+
+  void _selectToPlay (int tabIdx, int activeIdx) async {
+    setState(() {
+      _curTabIdx = tabIdx;
+      _curActiveIdx = activeIdx;
+    });
+    String nextVideoUrl =
+        _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.url!;
+    String nextDecVideoUrl = await controller.getVodDecrypt(nextVideoUrl);
+    // 切换播放源
+    // 如果不是自动开始播放，那么先执行stop
+    if (player.value.state == FijkState.completed) {
+      await player.stop();
+    }
+    await player.reset().then((_) async {
+      player.setDataSource(nextDecVideoUrl, autoPlay: true);
+    });
   }
 }

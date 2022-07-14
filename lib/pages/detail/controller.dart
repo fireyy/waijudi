@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:waijudi/models/video_detail.dart';
+import 'package:waijudi/models/line.dart';
 import 'package:waijudi/controller.dart';
 
 class DetailController extends GetxController {
@@ -8,7 +9,7 @@ class DetailController extends GetxController {
   RxMap<String, List<Map<String, dynamic>>> videoList = RxMap<String, List<Map<String, dynamic>>>({
     "video": []
   });
-  RxList<Map<String, dynamic>> list = RxList<Map<String, dynamic>>([]);
+  RxList<LineModel> lineList = RxList<LineModel>([]);
   Rx<VideoDetail> videoDetail = Rx<VideoDetail>(VideoDetail());
   
   DetailController() {
@@ -22,16 +23,20 @@ class DetailController extends GetxController {
   loadVideo() async {
     try {
       var lines = await appController.apiClient.getLine(videoId);
+      lineList.value = lines;
       var result = await appController.apiClient.getVideoById(videoId);
       videoDetail.value = result;
+      List<Map<String, dynamic>> list = [];
       for (var line in lines) {
         var drama = await appController.apiClient.getDramaDetail(id: videoId, lineId: line.vodLineId);
-        var dUrl = await getVodDecrypt(drama.first.vodDramaUrl);
+        var video = drama.firstWhere((value) => value.dramaName == videoDetail.value.dramaId);
+        var index = drama.indexOf(video);
+        var dUrl = await getVodDecrypt(video.vodDramaUrl);
         list.add({
           'name': line.name,
           'list': drama.map((d) => {
             'name': d.dramaName,
-            'url': drama.indexOf(d) == 0 ? dUrl : d.vodDramaUrl
+            'url': drama.indexOf(d) == index ? dUrl : d.vodDramaUrl
           }).toList()
         });
       }

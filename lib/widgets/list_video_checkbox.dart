@@ -141,9 +141,7 @@ Widget listPlaybackBuilder(BuildContext context, Playback item, int index, Check
     remarks: item.vodRemarks,
     onTap: () {
       goToDetail(item.videoName, {
-        'id': '${item.id}',
-        'vodId': '${item.vodId}',
-        '': '${item.vodLineId}',
+        'id': '${item.vodId}',
       });
     },
     onChecked: params.onChecked,

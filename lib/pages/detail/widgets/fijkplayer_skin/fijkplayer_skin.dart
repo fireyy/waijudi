@@ -57,6 +57,7 @@ class CustomFijkPanel extends StatefulWidget {
   final Function? onChangeVideo;
   final int curTabIdx;
   final int curActiveIdx;
+  final int seekPos;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
 
@@ -71,6 +72,7 @@ class CustomFijkPanel extends StatefulWidget {
     required this.videoFormat,
     required this.curTabIdx,
     required this.curActiveIdx,
+    required this.seekPos,
   });
 
   @override
@@ -113,7 +115,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     ).animate(_animationController!);
     // is not null
     if (_videoSourceTabs.video!.length < 1) return null;
-    // init plater state
+    // init player state
     setState(() {
       _playerState = player.value.state;
     });
@@ -189,10 +191,10 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx) async {
     // await player.stop();
-    await player.reset().then((_) {
+    await player.reset().then((_) async {
       String curTabActiveUrl =
           _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
-      player.setDataSource(
+      await player.setDataSource(
         curTabActiveUrl,
         autoPlay: true,
       );
