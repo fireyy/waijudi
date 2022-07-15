@@ -1,34 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
-import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/schema.dart' show VideoSourceFormat;
 import 'package:waijudi/models/video_detail.dart';
 import 'package:waijudi/util/time.dart';
-
-// 定制UI配置项
-class PlayerShowConfig implements ShowConfigAbs {
-  @override
-  bool drawerBtn = true;
-  @override
-  bool nextBtn = true;
-  @override
-  bool speedBtn = true;
-  @override
-  bool topBar = true;
-  @override
-  bool lockBtn = true;
-  @override
-  bool autoNext = true;
-  @override
-  bool bottomPro = true;
-  @override
-  bool stateAuto = true;
-  @override
-  bool isAutoPlay = false;
-}
+import 'package:waijudi/pages/detail/widgets/skin/player.dart';
 
 class Player extends StatefulWidget {
   const Player({Key? key}) : super(key: key);
@@ -42,6 +21,7 @@ class _PlayerState extends State<Player>
   final FijkPlayer player = FijkPlayer();
   final DetailController controller = Get.find();
   // Map<String, List<Map<String, dynamic>>> videoList = {};
+  late YoutubePlayerController _controller;
 
   VideoSourceFormat? _videoSourceTabs;
   late TabController _tabController;
@@ -52,8 +32,6 @@ class _PlayerState extends State<Player>
   int _tabLength = 0;
   late VideoDetail videoDetail;
   bool _showSeekTip = false;
-
-  ShowConfigAbs vCfg = PlayerShowConfig();
 
   @override
   void dispose() {
@@ -73,6 +51,18 @@ class _PlayerState extends State<Player>
   @override
   void initState() {
     super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: '$_curActiveIdx',
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        autoPlay: true,
+        disableDragSeek: false,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
+    )..addListener(listener);
     videoDetail = controller.videoDetail.value;
     // videoList = controller.videoList;
     // 格式化json转对象
@@ -83,8 +73,6 @@ class _PlayerState extends State<Player>
       length: _tabLength,
       vsync: this,
     );
-    // 这句不能省，必须有
-    speed = 1.0;
     // 如果是续播，则尝试回到上次的状态
     if (videoDetail.vodTimed > 0 && videoDetail.dramaId != controller.videoList['video']![0]['list'][0]['name']) {
       _curTabIdx = controller.lineList.indexWhere((line) => line.vodLineId == videoDetail.vodLineId);
@@ -92,6 +80,10 @@ class _PlayerState extends State<Player>
     }
     _seekPos = videoDetail.vodTimed;
     _showSeekTip = _seekPos > 0;
+  }
+
+  void listener() {
+    //
   }
 
   PreferredSizeWidget? buildAppBar() {
@@ -258,46 +250,37 @@ class _PlayerState extends State<Player>
               Rect texturePos,
             ) {
               /// 使用自定义的布局
-              return CustomFijkPanel(
-                player: player,
-                viewSize: viewSize,
-                texturePos: texturePos,
-                pageContent: context,
-                // 标题 当前页面顶部的标题部分
-                playerTitle: '${videoDetail.name}($_seekPos)',
-                // 当前视频改变钩子
-                onChangeVideo: onChangeVideo,
-                // 当前视频源tabIndex
-                curTabIdx: _curTabIdx,
-                // 当前视频源activeIndex
-                curActiveIdx: _curActiveIdx,
-                // 历史视频播放进度
-                seekPos: _seekPos,
-                // 显示的配置
-                showConfig: vCfg,
-                // json格式化后的视频数据
-                videoFormat: _videoSourceTabs,
+              return YoutubePlayerBuilder(
+                onExitFullScreen: () {
+                  // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+                  SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+                },
+                player: YoutubePlayer(
+                  controller: _controller,
+                ),
+                builder: (context, player) => Scaffold(
+                  appBar: AppBar(
+                    leading: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          color: AppColors.DARK,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    title: const Text(
+                      'Youtube Player Flutter',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
               );
             },
           ),
-          _showSeekTip ? GestureDetector(
-            onTap: () {
-              player.seekTo(_seekPos*1000);
-              setState(() {
-                _showSeekTip = false;
-              });
-            },
-            child: Container(
-              color: Colors.green[100],
-              padding: const EdgeInsets.all(10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Seek To Latest Position ${Duration(seconds: _seekPos).toString().split(".")[0]}',
-                ),
-              ),
-            ),
-          ) : Container(),
           SizedBox(
             height: 280,
             child: buildPlayDrawer(),
