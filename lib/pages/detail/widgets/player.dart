@@ -3,6 +3,7 @@ import 'package:fijkplayer/fijkplayer.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
+import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/config.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/fijkplayer_skin.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/schema.dart' show VideoSourceFormat;
 import 'package:waijudi/models/video_detail.dart';
@@ -272,7 +273,7 @@ class _PlayerState extends State<Player>
                 // 当前视频源activeIndex
                 curActiveIdx: _curActiveIdx,
                 // 历史视频播放进度
-                seekPos: _seekPos,
+                startPosition: _seekPos,
                 // 显示的配置
                 showConfig: vCfg,
                 // json格式化后的视频数据
@@ -280,24 +281,6 @@ class _PlayerState extends State<Player>
               );
             },
           ),
-          _showSeekTip ? GestureDetector(
-            onTap: () {
-              player.seekTo(_seekPos*1000);
-              setState(() {
-                _showSeekTip = false;
-              });
-            },
-            child: Container(
-              color: Colors.green[100],
-              padding: const EdgeInsets.all(10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Seek To Latest Position ${Duration(seconds: _seekPos).toString().split(".")[0]}',
-                ),
-              ),
-            ),
-          ) : Container(),
           SizedBox(
             height: 280,
             child: buildPlayDrawer(),
