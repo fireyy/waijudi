@@ -29,7 +29,7 @@ class DetailController extends GetxController {
       List<Map<String, dynamic>> list = [];
       for (var line in lines) {
         var drama = await appController.apiClient.getDramaDetail(id: videoId, lineId: line.vodLineId);
-        var video = drama.firstWhere((value) => value.dramaName == videoDetail.value.dramaId);
+        var video = drama.firstWhere((value) => value.dramaName == videoDetail.value.dramaId, orElse: () => drama.first);
         var index = drama.indexOf(video);
         var dUrl = await getVodDecrypt(video.vodDramaUrl);
         list.add({
@@ -42,7 +42,8 @@ class DetailController extends GetxController {
       }
       videoList['video'] = list;
     } catch (error) {
-      Get.log(error.toString());
+      // Get.log(error.toString());
+      rethrow;
     }
   }
 
