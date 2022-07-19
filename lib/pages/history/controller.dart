@@ -28,7 +28,19 @@ class HistoryController extends GetxController {
     }
   }
 
-  void delPlaybackRecords () {
+  Future removeSinglePlayback (int id) async {
+    selected.clear();
+    selected.add(id);
+    await delPlaybackRecords();
+  }
+
+  Future delPlaybackRecords () async {
+    await appController.apiClient.delPlaybackRecord(selected.join(','));
+    searchResults.removeWhere((item) => selected.contains(item.id));
+    selected.clear();
+  }
+
+  void confirmToDeletePlaybackRecords () {
     if (selected.isNotEmpty) {
       Get.defaultDialog(
         title: 'Confirm',
@@ -36,9 +48,7 @@ class HistoryController extends GetxController {
         textCancel: 'Cancel',
         confirmTextColor: AppColors.LIGHT,
         onConfirm: () async {
-          await appController.apiClient.delPlaybackRecord(selected.join(','));
-          searchResults.removeWhere((item) => selected.contains(item.id));
-          selected.clear();
+          await delPlaybackRecords();
           Get.back();
         },
         middleText: "Do you confirm to remove this item?",

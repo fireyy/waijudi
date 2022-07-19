@@ -58,6 +58,19 @@ class History extends StatelessWidget {
                             onChecked: (id, value) {
                               controller.toggleSelected(id, value);
                             },
+                            onDismissed: (DismissDirection direction) {
+                              return Future(() async {
+                                if (direction == DismissDirection.endToStart) {
+                                  await controller.removeSinglePlayback(item.id);
+                                  return true;
+                                }
+                                if (direction == DismissDirection.startToEnd) {
+                                  controller.isEdit = true;
+                                  controller.toggleSelected(item.id, true);
+                                }
+                                return false;
+                              });
+                            }
                           );
                           return listPlaybackBuilder(context, item, index, params);
                         }
@@ -73,7 +86,7 @@ class History extends StatelessWidget {
               return Visibility(
                 visible: controller.isEdit,
                 child: FloatingActionButton(
-                  onPressed: () => controller.delPlaybackRecords(),
+                  onPressed: () => controller.confirmToDeletePlaybackRecords(),
                   backgroundColor: AppColors.LIGHT_GREEN,
                   child: Icon(Icons.delete_forever, color: AppColors.LIGHT),
                 ),

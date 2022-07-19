@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Playback {
   int vodId;
   String dramaId;
@@ -49,10 +51,12 @@ class CheckboxParams {
   void Function(int, bool) onChecked;
   bool isChecked;
   bool isShowCheckbox;
+  Future<bool?> Function(DismissDirection) onDismissed;
   
   CheckboxParams({
     required this.onChecked,
     this.isChecked = false,
     this.isShowCheckbox = false,
+    required this.onDismissed,
   });
 }
