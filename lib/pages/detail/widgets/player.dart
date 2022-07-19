@@ -52,7 +52,7 @@ class _PlayerState extends State<Player>
   int _seekPos = 0;
   int _tabLength = 0;
   late VideoDetail videoDetail;
-  bool _showSeekTip = false;
+  String _dramaId = '';
 
   ShowConfigAbs vCfg = PlayerShowConfig();
 
@@ -94,7 +94,7 @@ class _PlayerState extends State<Player>
       _curActiveIdx = _curActiveIdx == -1 ? 0 : _curActiveIdx;
     }
     _seekPos = videoDetail.vodTimed;
-    _showSeekTip = _seekPos > 0;
+    _dramaId = controller.videoList['video']![_curTabIdx]['list'][_curActiveIdx]['name'];
   }
 
   PreferredSizeWidget? buildAppBar() {
@@ -128,18 +128,23 @@ class _PlayerState extends State<Player>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-              child: Text(
-                '${videoDetail.name}(${videoDetail.vodDoubanScore})',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: AppColors.DARK,
-                  fontWeight: FontWeight.bold,
+            GestureDetector(
+              onTap: () {
+                showDetail(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: Text(
+                  '${videoDetail.name}(${videoDetail.vodDoubanScore})',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppColors.DARK,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+              )
             ),
-            Padding(
+            videoDetail.vodSub != '' ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
                 videoDetail.vodSub,
@@ -148,8 +153,8 @@ class _PlayerState extends State<Player>
                   color: AppColors.DARK,
                 ),
               ),
-            ),
-            Padding(
+            ) : Container(),
+            videoDetail.vodActor != '' ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
                 videoDetail.vodActor,
@@ -158,7 +163,7 @@ class _PlayerState extends State<Player>
                   color: AppColors.DARK,
                 ),
               ),
-            ),
+            ) : Container(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Text(
@@ -178,6 +183,35 @@ class _PlayerState extends State<Player>
           ],
         )
       ),
+    );
+  }
+
+  void showDetail(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          padding: const EdgeInsets.all(10),
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Director: ${videoDetail.vodDirector}'),
+              Text('Actor: ${videoDetail.vodActor}'),
+              const SizedBox(height: 10),
+              Expanded(
+                flex: 2,
+                child: SingleChildScrollView(
+                  child: Text(videoDetail.vodContent),
+                )
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -267,7 +301,7 @@ class _PlayerState extends State<Player>
                 texturePos: texturePos,
                 pageContent: context,
                 // 标题 当前页面顶部的标题部分
-                playerTitle: '${videoDetail.name}($_seekPos)',
+                playerTitle: '${videoDetail.name} $_dramaId',
                 // 当前视频改变钩子
                 onChangeVideo: onChangeVideo,
                 // 当前视频源tabIndex
@@ -283,8 +317,7 @@ class _PlayerState extends State<Player>
               );
             },
           ),
-          SizedBox(
-            height: 280,
+          Expanded(
             child: buildPlayDrawer(),
           ),
         ],

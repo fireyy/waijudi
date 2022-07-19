@@ -104,6 +104,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       int curActiveIdx = widget.curActiveIdx;
       changeCurPlayVideo(curTabIdx, curActiveIdx, startPosition: widget.startPosition);
     }
+    player.setOption(FijkOption.hostCategory, "enable-snapshot", 1);
+    player.setOption(FijkOption.playerCategory, "mediacodec-all-videos", 1);
     player.setOption(FijkOption.playerCategory, "enable-accurate-seek", 1);
     player.setOption(FijkOption.playerCategory, "accurate-seek-timeout", 500);
     player.addListener(_playerValueChanged);
