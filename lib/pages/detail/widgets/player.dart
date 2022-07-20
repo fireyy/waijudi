@@ -272,7 +272,7 @@ class _PlayerState extends State<Player>
           FijkView(
             height: 260,
             color: Colors.black,
-            fit: FijkFit.cover,
+            fit: FijkFit.contain,
             player: player,
             onDispose: (FijkData? data) {
               String currentDramaId = _videoSourceTabs!.video![_curTabIdx]!.list![_curActiveIdx]!.name!;
