@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:waijudi/util/colors.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -25,20 +24,23 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawGestureDetector(
-      gestures: <Type, GestureRecognizerFactory>{
-        SerialTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<SerialTapGestureRecognizer>(
-          () => SerialTapGestureRecognizer(),
-          (SerialTapGestureRecognizer instance) {
-            instance.onSerialTapDown = (SerialTapDownDetails details) {
-              if (details.count == 5) {
-                if (onMagic is Function) {
-                  onMagic?.call();
-                }
-              }
-            };
-          },
-        ),
+    int lastTap = DateTime.now().millisecondsSinceEpoch;
+    int consecutiveTaps = 0;
+    return GestureDetector(
+      onTap: () {
+        int now = DateTime.now().millisecondsSinceEpoch;
+        if (now - lastTap < 300) {
+          consecutiveTaps ++;
+          if (consecutiveTaps > 4){
+            if (onMagic is Function) {
+              onMagic?.call();
+            }
+            consecutiveTaps = 0;
+          }
+        } else {
+          consecutiveTaps = 0;
+        }
+        lastTap = now;
       },
       child: AppBar(
         centerTitle: true,
@@ -53,7 +55,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           alignment: Alignment.bottomLeft,
           child: bottom,
         ),
-      ),
+      )
     );
   }
 }
