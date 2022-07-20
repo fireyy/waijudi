@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/detail/controller.dart';
 import 'package:waijudi/util/colors.dart';
@@ -10,14 +11,17 @@ class VideoDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DetailController>(
-      init: DetailController(),
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: AppColors.LIGHT,
-          body: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const PlayerSkeleton()),
-        );
-      },
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: GetBuilder<DetailController>(
+        init: DetailController(),
+        builder: (controller) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            body: Obx(() => controller.videoList['video']!.isNotEmpty ? const Player() : const PlayerSkeleton()),
+          );
+        },
+      ),
     );
   }
 }
