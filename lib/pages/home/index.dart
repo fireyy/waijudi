@@ -32,7 +32,10 @@ class Home extends GetView<HomeController> {
           ),
         ],
         height: 85,
-        bottom: ListCategories()
+        bottom: ListCategories(),
+        onMagic: () {
+          controller.appController.showConfig();
+        },
       ),
       body: EasyRefresh(
         refreshOnStart: true,

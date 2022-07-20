@@ -24,6 +24,10 @@ class ApiClient extends GetConnect {
       token = Storage.token;
     }
 
+    if (Storage.hasData('currentApiUrl')) {
+      httpClient.baseUrl = Storage.currentApiUrl;
+    }
+
     httpClient.addRequestModifier<dynamic>((request) {
       Get.log(
         'REQUEST ║ ${request.method.toUpperCase()}\n'
@@ -91,6 +95,7 @@ class ApiClient extends GetConnect {
     }
   }
 
+  // 获取视频列表
   Future<SearchResult> getVideo (
       {int page = 1, int category = 0, int pageSize = 6}) async {
     var params = {'type_id': category, 'page': page, 'pageSize': pageSize};
@@ -98,21 +103,25 @@ class ApiClient extends GetConnect {
     return _post('/web/video_home/getVideo', params: params).then((data) => SearchResult.fromJson(data));
   }
 
+  // 获取视频详情
   Future<VideoDetail> getVideoById (int videoId) async {
     var params = {'id': videoId, 'page': 0, 'pageSize': 99};
 
     return _post('/web/video_home/getVideo', params: params).then((data) => VideoDetail.fromJson(data));
   }
 
+  // 获取视频分类
   Future<List<Category>> getNavigation () async {
     return _post('/web/video_home/getNavigation').then((data) => (data as List).map((d) => Category.fromJson(d)).toList());
   }
 
+  // 筛选数据
   Future<SearchResultWithVideoItem> searchByFilter (FilterParams params) async {
 
     return _get('/web/vod_type/get', params: params.toJson()).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 
+  // 获取筛选类型
   Future<List<FilterModel>> getType () async {
 
     return _get('/web/vod_type/getType', params: {
@@ -121,6 +130,7 @@ class ApiClient extends GetConnect {
     }).then((data) => (data as List).map((d) => FilterModel.fromJson(d)).toList());
   }
 
+  // 搜索名称
   Future<SearchResultWithVideoItem> searchByName (String name,
       {int page = 1, int pageSize = 20}) async {
     var params = {'name': name, 'page': page, 'pageSize': pageSize};
@@ -128,43 +138,53 @@ class ApiClient extends GetConnect {
     return _post('/web/search_home/getHodVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 
+  // 获取线路列表
   Future<List<LineModel>> getLine (int id) async {
-
     return _get('/web/video_home/line?pageSize=999&id=$id&page=0').then((data) => (data as List).map((d) => LineModel.fromJson(d)).toList());
   }
 
+  // 获取视频的集数列表
   Future<List<Drama>> getDramaDetail ({ int id = 0, int lineId = 0 }) async {
-
     return _get('/web/video_home/drama?vod_line_id=$lineId&id=$id&pageSize=999&page=0').then((data) => (data as List).map((d) => Drama.fromJson(d)).toList());
   }
 
+  // 获取播放地址
   Future<String> vodDecrypt (String url) async {
     var params = {'url': url};
     return _get('/web/common/vodDecrypt', params: params).then((data) => data['url']);
   }
 
+  // 登陆
   Future<String> login (String mobile, String password) async {
     var params = {'mobile': mobile, 'password': password, 'ip': ''};
     return _post('/web/user/login', params: params).then((data) => data['token']);
   }
 
+  // 获取播放记录列表
   Future<SearchResultWithPlayback> getPlaybackRecord (int page) async {
     var params = {'page': page, 'pageSize': 20};
     return _post('/web/user_info/playbackRecord', params: params).then((data) => data['log']).then((data) => SearchResultWithPlayback.fromJson(data));
   }
-  // {"vod_line_id":15,"vod_time":3702.491,"vod_id":21007,"drama_id":"%E7%AC%AC01%E9%9B%86","vod_timed":6.9092216400000002}
+  
+  // 保存播放记录
   Future<dynamic> addPlaybackRecord (Map<String, dynamic> params) async {
     return _post('/web/user_info/addPlaybackRecord', params: params);
   }
 
+  // 删除播放记录
   Future<dynamic> delPlaybackRecord (String ids) async {
     var params = {'id': ids};
     return _post('/web/user_info/delPlaybackRecord', params: params);
   }
 
+  // 获取更多页面数据
   Future<SearchResultWithVideoItem> getMore ({int id = 0, String name = '', int page = 1, int pageSize = 20}) async {
     var params = {'id': id, 'name': name, 'page': page, 'pageSize': 20};
     return _get('/web/video_home/getMore', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
-  // /web/common/getUrl, data: [{"value":"https:\/\/waijudi.ywhuilong.com"},{"value":"https:\/\/api.yaocaoshiyu.com"},{"value":"https:\/\/wjapi.zhongxinlianmin.com"}]
+
+  // 获取API地址
+  Future<List<String>> getUrl () async {
+    return _get('/web/common/getUrl').then((data) => (data as List).map((d) => d['value'] as String).toList());
+  }
 }

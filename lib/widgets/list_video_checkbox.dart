@@ -169,7 +169,7 @@ Widget listPlaybackBuilder(BuildContext context, Playback item, int index, Check
     id: item.id,
     thumbnail: item.videoPic,
     title: item.videoName,
-    subtitle: 'Watched at: ${item.updatetime}\nProcess: ${item.proportion}%',
+    subtitle: '最后观看时间: ${item.updatetime}\n看到: ${item.proportion}%',
     playcount: '',
     score: item.dramaId,
     remarks: item.vodRemarks,

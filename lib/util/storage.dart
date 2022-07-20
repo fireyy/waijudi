@@ -28,5 +28,13 @@ class Storage {
 
   static List<FilterModel> getFilter() => (_storage.read<List<dynamic>>('filterType') as List).map((d) => FilterModel.fromJson(d)).toList();
 
+  static Future<void> saveApiUrls(List<String> value) => _storage.write('apiUrl', value);
+
+  static List<String> get apiUrls => _storage.read<List<String>>('apiUrl') ?? [];
+
+  static Future<void> saveCurrentApiUrl(String value) => _storage.write('currentApiUrl', value);
+
+  static String get currentApiUrl => _storage.read<String>('currentApiUrl') ?? apiUrls[0];
+
   static Future<void> clearStorage() => _storage.erase();
 }

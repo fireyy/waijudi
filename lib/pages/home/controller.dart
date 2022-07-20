@@ -15,7 +15,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadCategories();
+    // loadCategories();
   }
 
   loadCategories() async {
