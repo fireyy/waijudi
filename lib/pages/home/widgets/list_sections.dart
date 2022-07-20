@@ -24,13 +24,31 @@ class ListSections extends StatelessWidget {
                   right: 25,
                   bottom: 10,
                 ),
-                child: Text(section.name, style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.DARK,
-                ))
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/more', parameters: {
+                      'id': '${section.id}',
+                      'name': section.name,
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(section.name, style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.DARK,
+                        )),
+                      ),
+                      Text('更多»', style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.DARK,
+                      )),
+                    ],
+                  )
+                ),
               ),
-              HomeList(section.video)
+              VideoList(section.video)
             ]
           );
         },

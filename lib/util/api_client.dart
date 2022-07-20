@@ -161,6 +161,10 @@ class ApiClient extends GetConnect {
     var params = {'id': ids};
     return _post('/web/user_info/delPlaybackRecord', params: params);
   }
-  // /web/user_info/delPlaybackRecord, {"id":"3515116,3563013"}
+
+  Future<SearchResultWithVideoItem> getMore ({int id = 0, String name = '', int page = 1, int pageSize = 20}) async {
+    var params = {'id': id, 'name': name, 'page': page, 'pageSize': 20};
+    return _get('/web/video_home/getMore', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
+  }
   // /web/common/getUrl, data: [{"value":"https:\/\/waijudi.ywhuilong.com"},{"value":"https:\/\/api.yaocaoshiyu.com"},{"value":"https:\/\/wjapi.zhongxinlianmin.com"}]
 }

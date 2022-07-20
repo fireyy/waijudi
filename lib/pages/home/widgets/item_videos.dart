@@ -18,7 +18,7 @@ class ListItem extends StatelessWidget {
       onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.WHITE,
+          color: AppColors.DARK,
           image: DecorationImage(
             image: CachedNetworkImageProvider(item.vodPic),
             fit: BoxFit.cover,

@@ -7,6 +7,7 @@ import 'pages/search/index.dart';
 import 'pages/list/index.dart';
 import 'pages/login/index.dart';
 import 'pages/history/index.dart';
+import 'pages/more/index.dart';
 
 class AppPages {
   static final routes = [
@@ -16,5 +17,6 @@ class AppPages {
     GetPage(name: "/list", page: () => const List()),
     GetPage(name: "/login", page: () => Login()),
     GetPage(name: "/history", page: () => const History()),
+    GetPage(name: "/more", page: () => const More()),
   ];
 }

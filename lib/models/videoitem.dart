@@ -10,6 +10,7 @@ class VideoItem {
   String vodRemarks;
   String? vodBlurb;
   String? vodActor;
+  String? createtime;
 
   VideoItem({
     this.id = 0,
@@ -21,8 +22,9 @@ class VideoItem {
     this.vodPic = '',
     this.vodDoubanScore = '',
     this.vodRemarks = '',
-    this.vodBlurb,
-    this.vodActor,
+    this.vodBlurb = '',
+    this.vodActor = '',
+    this.createtime = '',
   });
 
   Map<String, dynamic> toJson() {
@@ -38,6 +40,7 @@ class VideoItem {
       'vod_remarks': vodRemarks,
       'vod_blurb': vodBlurb,
       'vod_actor': vodActor,
+      'createtime': createtime,
     };
   }
 
@@ -52,5 +55,6 @@ class VideoItem {
       vodDoubanScore = (jsonMap['vod_douban_score'] ?? '').toString(),
       vodRemarks = jsonMap['vod_remarks'].toString(),
       vodBlurb = (jsonMap['vod_blurb'] ?? '').toString(),
-      vodActor = (jsonMap['vod_actor'] ?? '').toString();  
+      vodActor = (jsonMap['vod_actor'] ?? '').toString(),
+      createtime = (jsonMap['createtime'] ?? '').toString();
 }

@@ -3,10 +3,10 @@ import 'package:waijudi/models/videoitem.dart';
 
 import 'item_videos.dart';
 
-class HomeList extends StatelessWidget {
+class VideoList extends StatelessWidget {
   final List<VideoItem> videoItems;
 
-  const HomeList(this.videoItems, {Key? key}) : super(key: key);
+  const VideoList(this.videoItems, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

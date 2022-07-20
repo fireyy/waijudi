@@ -73,7 +73,7 @@ class ListController extends GetxController {
   }
 
   goToTop () {
-    scrollController.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.ease);
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   @override
