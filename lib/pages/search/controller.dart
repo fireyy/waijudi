@@ -8,8 +8,8 @@ class SearchController extends GetxController {
   final Rx<String> _searchTerm = Rx<String>('');
   final RxList<VideoItem> searchResults = RxList<VideoItem>([]);
   final RxInt pageKey = 1.obs;
+  RxBool isLoading = false.obs;
   final EasyRefreshController loadController = EasyRefreshController(
-    controlFinishRefresh: true, // FIXME: https://github.com/xuelongqy/flutter_easy_refresh/issues/563
     controlFinishLoad: true,
   );
 
@@ -17,21 +17,24 @@ class SearchController extends GetxController {
     // TODO: load hot keywords
   }
 
-  searchByName () async {
+  searchByName ({ bool isLoadMore = true }) async {
     print('====================searchByName: ${pageKey.value}, ${_searchTerm.value}');
     var result = await appController.apiClient.searchByName(_searchTerm.value, page: pageKey.value);
     pageKey.value = pageKey.value + 1;
     searchResults.addAll(result.data);
-    final isLastPage = result.currentPage == result.lastPage;
-    loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
+    final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
+    if (isLoadMore) loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
   }
 
   search (String name) async {
+    isLoading.value = true;
     _searchTerm.value = name;
     pageKey.value = 1;
     searchResults.clear();
     loadController.resetFooter();
-    loadController.callLoad();
+    // loadController.callLoad();
+    await searchByName(isLoadMore: false);
+    isLoading.value = false;
   }
 
   @override

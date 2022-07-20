@@ -7,6 +7,8 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/list_video_item.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
+import 'package:waijudi/widgets/loading.dart';
+import 'package:waijudi/widgets/empty_tip.dart';
 
 class List extends StatelessWidget {
   const List({Key? key}) : super(key: key);
@@ -78,12 +80,7 @@ class List extends StatelessWidget {
                 Obx(
                   () {
                     return 
-                      controller.isLoading.value ? const SliverToBoxAdapter(child: SizedBox(
-                        height: 150,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )) : SliverList(
+                      controller.isLoading.value ? SliverToBoxAdapter(child: Loading()) : controller.searchResults.isEmpty ? SliverToBoxAdapter(child: EmptyTip()) : SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           final VideoItem item = controller.searchResults.elementAt(index);

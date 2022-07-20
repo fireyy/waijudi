@@ -10,7 +10,6 @@ class ListController extends GetxController {
   AppController appController = Get.find();
   final RxList<VideoItem> searchResults = RxList<VideoItem>([]);
   final EasyRefreshController loadController = EasyRefreshController(
-    controlFinishRefresh: true,
     controlFinishLoad: true,
   );
   Rx<FilterParams> filterParams = Rx<FilterParams>(FilterParams());

@@ -8,6 +8,8 @@ import 'package:waijudi/widgets/list_video_item.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:waijudi/widgets/loading.dart';
+import 'package:waijudi/widgets/empty_tip.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -45,7 +47,7 @@ class Search extends StatelessWidget {
             childBuilder: (context, physics) {
               return Obx(
                 () {
-                  return ListView.builder(
+                  return controller.isLoading.value ? Loading() : controller.searchResults.isEmpty ? EmptyTip() : ListView.builder(
                     physics: physics,
                     itemExtent: 140,
                     itemCount: controller.searchResults.length,
