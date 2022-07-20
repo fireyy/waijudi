@@ -5,18 +5,21 @@ class SearchField extends StatelessWidget {
   final Function onSubmitted;
   final Function onTap;
   final bool? autofocus;
+  final TextEditingController? controller;
 
-  SearchField({Key? key, Function? onSubmitted, Function? onTap, bool? autofocus})
+  SearchField({Key? key, Function? onSubmitted, Function? onTap, bool? autofocus, TextEditingController? controller})
       : onSubmitted = (onSubmitted ?? () {}),
         onTap = (onTap ?? () {}),
         autofocus = autofocus ?? false,
+        controller = controller ?? TextEditingController(),
         super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 34.0,
       child: TextField(
+        controller: controller,
         showCursor: autofocus,
         autofocus: autofocus ?? false,
         textInputAction: TextInputAction.search,

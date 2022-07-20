@@ -13,7 +13,7 @@ class AppPages {
   static final routes = [
     GetPage(name: "/", page: () => const Home(), bindings: [HomeBinding(),]),
     GetPage(name: "/detail", page: () => const VideoDetail()),
-    GetPage(name: "/search", page: () => const Search(), transition: Transition.noTransition),
+    GetPage(name: "/search", page: () => Search(), transition: Transition.noTransition),
     GetPage(name: "/list", page: () => const List()),
     GetPage(name: "/login", page: () => Login()),
     GetPage(name: "/history", page: () => const History()),

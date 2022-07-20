@@ -12,9 +12,14 @@ class SearchController extends GetxController {
   final EasyRefreshController loadController = EasyRefreshController(
     controlFinishLoad: true,
   );
+  final RxList<String> hotKeywords = RxList<String>([]);
 
   SearchController() {
-    // TODO: load hot keywords
+    getHotKeywords();
+  }
+
+  getHotKeywords () async {
+    hotKeywords.value = await appController.apiClient.getHotKeywords();
   }
 
   searchByName ({ bool isLoadMore = true }) async {

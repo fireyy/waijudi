@@ -133,7 +133,7 @@ class ApiClient extends GetConnect {
   // 搜索名称
   Future<SearchResultWithVideoItem> searchByName (String name,
       {int page = 1, int pageSize = 20}) async {
-    var params = {'name': name, 'page': page, 'pageSize': pageSize};
+    var params = {'name': Uri.encodeComponent(name), 'page': page, 'pageSize': pageSize};
 
     return _post('/web/search_home/getHodVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
@@ -186,5 +186,10 @@ class ApiClient extends GetConnect {
   // 获取API地址
   Future<List<String>> getUrl () async {
     return _get('/web/common/getUrl').then((data) => (data as List).map((d) => d['value'] as String).toList());
+  }
+
+  // 获取热门搜索关键字
+  Future<List<String>> getHotKeywords () async {
+    return _get('/web/search_home/getType?pageSize=40&page=1').then((data) => (data as List).map((d) => d['name'] as String).toList());
   }
 }

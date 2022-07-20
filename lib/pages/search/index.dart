@@ -12,7 +12,9 @@ import 'package:waijudi/widgets/loading.dart';
 import 'package:waijudi/widgets/empty_tip.dart';
 
 class Search extends StatelessWidget {
-  const Search({Key? key}) : super(key: key);
+  Search({Key? key}) : super(key: key);
+
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class Search extends StatelessWidget {
           appBar: CustomAppBar(
             title: SearchField(autofocus: true, onSubmitted: (value) {
               controller.search(value);
-            }),
+            }, controller: searchController),
             actions: [
               CustomAppBarAction(
                 () {
@@ -47,15 +49,47 @@ class Search extends StatelessWidget {
             childBuilder: (context, physics) {
               return Obx(
                 () {
-                  return controller.isLoading.value ? Loading() : controller.searchResults.isEmpty ? EmptyTip() : ListView.builder(
-                    physics: physics,
-                    itemExtent: 140,
-                    itemCount: controller.searchResults.length,
-                    itemBuilder: (context, index) {
-                      final VideoItem item = controller.searchResults.elementAt(index);
-                      return listVideoItemBuilder(context, item, index);
-                    },
-                  );
+                  if (controller.isLoading.value) {
+                    return Loading();
+                  } else if (controller.searchResults.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('热门搜索', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              ...(
+                                controller.hotKeywords.map(
+                                  (keyword) => GestureDetector(
+                                    onTap: () {
+                                      searchController.text = keyword;
+                                      controller.search(keyword);
+                                    },
+                                    child: Text(keyword),
+                                  )
+                                )
+                              )
+                            ],
+                          ),
+                          EmptyTip(),
+                        ],
+                      )
+                    );
+                  } else {
+                    return ListView.builder(
+                      physics: physics,
+                      itemCount: controller.searchResults.length,
+                      itemBuilder: (context, index) {
+                        final VideoItem item = controller.searchResults.elementAt(index);
+                        return listVideoItemBuilder(context, item, index);
+                      },
+                    );
+                  }
                 }
               );
             },
