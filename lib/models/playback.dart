@@ -51,7 +51,7 @@ class CheckboxParams {
   void Function(int, bool) onChecked;
   bool isChecked;
   bool isShowCheckbox;
-  Future<bool?> Function(DismissDirection) onDismissed;
+  void Function(String) onDismissed;
   
   CheckboxParams({
     required this.onChecked,

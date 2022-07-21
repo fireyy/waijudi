@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/video_image.dart';
 import 'package:waijudi/models/playback.dart';
 import 'package:waijudi/util/utils.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListVideoCheckbox extends StatelessWidget {
   const ListVideoCheckbox({
@@ -33,40 +35,37 @@ class ListVideoCheckbox extends StatelessWidget {
   final void Function(int, bool) onChecked;
   final bool isChecked;
   final bool isShowCheckbox;
-  final Future<bool?> Function(DismissDirection) onDismissed;
+  final void Function(String) onDismissed;
 
   @override
   Widget build(BuildContext context) {
-    RxBool isReached = false.obs;
-
-    return Dismissible(
+    return Slidable(
       key: ValueKey<int>(id),
-      dismissThresholds: const {
-        DismissDirection.startToEnd: 0.5,
-        DismissDirection.endToStart: 0.5,
-      },
-      onUpdate: (DismissUpdateDetails details) {
-        if (details.reached) {
-          isReached.value = true;
-        }
-      },
-      background: Container(
-        alignment: Alignment.center,
-        color: Colors.green,
-        child: Obx(() => isReached.value ? const Icon(
-          Icons.check,
-          color: Colors.white,
-        ) : const SizedBox()),
+      endActionPane: ActionPane(
+        extentRatio: 0.2,
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(
+          closeOnCancel: true,
+          onDismissed: () {},
+          confirmDismiss: () async {
+            return Future(() {
+              // 震动反馈
+              HapticFeedback.vibrate();
+              onDismissed('delete');
+              return true;
+            });
+          },
+        ),
+        children: [
+          SlidableAction(
+            onPressed: (context) => onDismissed('delete'),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: '删除',
+          ),
+        ],
       ),
-      secondaryBackground: Container(
-        alignment: Alignment.center,
-        color: Colors.red,
-        child: Obx(() => isReached.value ? const Icon(
-          Icons.delete,
-          color: Colors.white,
-        ) : const SizedBox()),
-      ),
-      confirmDismiss: onDismissed,
       child: GestureDetector(
         onTap: isShowCheckbox ? () => onChecked(id, !isChecked) : onTap,
         child: Container(

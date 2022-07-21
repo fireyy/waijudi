@@ -58,18 +58,13 @@ class History extends StatelessWidget {
                             onChecked: (id, value) {
                               controller.toggleSelected(id, value);
                             },
-                            onDismissed: (DismissDirection direction) {
-                              return Future(() async {
-                                if (direction == DismissDirection.endToStart) {
-                                  await controller.removeSinglePlayback(item.id);
-                                  return true;
-                                }
-                                if (direction == DismissDirection.startToEnd) {
-                                  controller.isEdit = true;
-                                  controller.toggleSelected(item.id, true);
-                                }
-                                return false;
-                              });
+                            onDismissed: (String direction) {
+                              if (direction == 'select') {
+                                controller.isEdit = true;
+                                controller.toggleSelected(item.id, true);
+                              } else if (direction == 'delete') {
+                                controller.removeSinglePlayback(item.id);
+                              }
                             }
                           );
                           return listPlaybackBuilder(context, item, index, params);
