@@ -11,13 +11,16 @@ class ListRanks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ...(
-          ranks.map((rank) => ItemRank(rank, rank == selectedRank, onSelect: onSelect))
-        )
-      ],
+    return SizedBox(
+      width: 300,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ...(
+            ranks.map((rank) => ItemRank(rank, rank == selectedRank, onSelect: onSelect))
+          )
+        ],
+      ),
     );
   }
 }

@@ -128,11 +128,14 @@ class ListVideoItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               rank != 0 ? Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(20),
                 child: Text(
                   '$rank',
                   style: TextStyle(
-                    fontSize: 24,
+                    decoration: rank < 4 ? TextDecoration.underline : TextDecoration.none,
+                    decorationStyle: TextDecorationStyle.wavy,
+                    decorationColor: Colors.orange,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: rank < 4 ? AppColors.LIGHT_GREEN : AppColors.DARK.withOpacity(0.5),
                   ),
