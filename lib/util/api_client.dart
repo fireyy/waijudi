@@ -28,7 +28,7 @@ class ApiClient {
     var options = BaseOptions(
       baseUrl: 'https://waijudi.ywhuilong.com',
       connectTimeout: 15000,
-      receiveTimeout: 3000,
+      receiveTimeout: 15000,
       headers: {
         'token': Storage.token,
       },
