@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:waijudi/controller.dart';
-import 'package:waijudi/util/storage.dart';
 
 class LoginController extends GetxController {
   AppController appController = Get.find();
@@ -26,8 +25,6 @@ class LoginController extends GetxController {
       isLoading.value = true;
       final token = await appController.apiClient.login(_mobile.value, _password.value);
       if (token != '') {
-        await Storage.saveToken(token);
-        appController.apiClient.addAuthToken(token);
         Get.offNamed(callback);
       }
     }

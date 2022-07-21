@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:waijudi/util/encrypt.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 
 import 'package:waijudi/models/api_response.dart';
 import 'package:waijudi/models/searchresult.dart';
@@ -12,68 +12,60 @@ import 'package:waijudi/util/storage.dart';
 import 'package:waijudi/models/video_detail.dart';
 import 'package:waijudi/models/rank.dart';
 
-class ApiClient extends GetConnect {
+class ApiClient {
   String token = '';
   @override
-  void onInit() {
-    httpClient.defaultDecoder = (json) => ApiResponse.fromJson(json);
-    httpClient.baseUrl = 'https://waijudi.ywhuilong.com';
-    httpClient.defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
-    httpClient.timeout = const Duration(seconds: 15);
+  static final _client = ApiClient._internal();
+  final _http = ApiClient.createDio();
 
-    if (Storage.hasData('token')) {
-      token = Storage.token;
-    }
+  get http => _http;
 
-    if (Storage.hasData('currentApiUrl')) {
-      httpClient.baseUrl = Storage.currentApiUrl;
-    }
+  ApiClient._internal();
 
-    httpClient.addRequestModifier<dynamic>((request) {
-      Get.log(
-        'REQUEST ║ ${request.method.toUpperCase()}\n'
-            'url: ${request.url}\n'
-            'Headers: ${request.headers}\n'
-            'Body: ${request.files?.toString() ?? ''}\n',
-      );
+  factory ApiClient() => _client;
 
-      return request;
-    });
-
-    httpClient.addResponseModifier<ApiResponse>((Request request, Response response) {
-      Get.log(
-        'Status Code: ${response.statusCode}, code=${response.body.code ?? ''}, msg=${response.body.msg ?? ''}\n'
-            'Data: ${response.body.data ?? ''}',
-      );
-      ApiResponse decodedResponse = response.body ?? ApiResponse();
-      if (decodedResponse.code == 1) {
-        return response;
-      } else if (decodedResponse.code == 2008) {
-        // request.printError(info: decodedResponse.msg);
-        Get.offNamed('/login', parameters: {
-          'callback': Get.routing.current
-        });
-        return response;
-      } else {
-        throw Exception(decodedResponse.msg);
-      }
-    });
-    super.onInit();
+  static Dio createDio() {
+    var options = BaseOptions(
+      baseUrl: 'https://waijudi.ywhuilong.com',
+      connectTimeout: 15000,
+      receiveTimeout: 3000,
+      headers: {
+        'token': Storage.token,
+      },
+      contentType: Headers.formUrlEncodedContentType,
+      // responseType: ResponseType.plain,
+    );
+    var dio = Dio(options);
+    dio.interceptors.add(InterceptorsWrapper(
+      onResponse:(response, handler) {
+        response.data = ApiResponse.fromJson(response.data);
+        if (response.data.code == 2008) {
+          Get.offNamed('/login', parameters: {
+            'callback': Get.routing.current
+          });
+        }
+        handler.next(response);
+      },
+    ));
+    dio.interceptors.add(LogInterceptor(requestHeader: true, requestBody: true, responseBody: true));
+    return dio;
   }
 
-  void addAuthToken (String t) {
-    token = t;
+  setToken (String value) {
+    if (value != '') {
+      token = value;
+      _http.options.headers['token'] = value;
+      Storage.saveToken(value);
+    }
   }
 
   Future<dynamic> _post (String uri, { Map? params }) async {
-    final formData = params != null ? FormData({
-      'params': sign(params),
-    }): {};
-    var response = await post(uri, formData, headers: {
-      'token': token,
-    });
+    FormData formData = FormData.fromMap(params != null ? {
+      'params': sign(params)
+    } : {});
+    var response = await _http.post(uri, data: formData);
     // print(response.body);
-    var decodedResponse = response.body;
+    var decodedResponse = response.data;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {
@@ -83,11 +75,9 @@ class ApiClient extends GetConnect {
   }
 
   Future<dynamic> _get (String uri, { Map<String, dynamic>? params }) async {
-    var response = await get(uri, query: params == null ?  params : params.map((key, value) => MapEntry(key, value.toString())), headers: {
-      'token': token,
-    });
+    var response = await _http.get(uri, queryParameters: params ?? {});
     // print(response.body);
-    var decodedResponse = response.body;
+    var decodedResponse = response.data;
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {
@@ -158,7 +148,10 @@ class ApiClient extends GetConnect {
   // 登陆
   Future<String> login (String mobile, String password) async {
     var params = {'mobile': mobile, 'password': password, 'ip': ''};
-    return _post('/web/user/login', params: params).then((data) => data['token']);
+    return _post('/web/user/login', params: params).then((data) {
+      setToken(data['token']);
+      return data['token'];
+    });
   }
 
   // 获取播放记录列表
