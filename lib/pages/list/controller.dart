@@ -38,19 +38,21 @@ class ListController extends GetxController {
     searchByFilter();
   }
 
-  searchByFilter () async {
+  fetchData () async {
+    return await appController.apiClient.searchByFilter(filterParams.value);
+  }
+
+  searchByFilter ({bool isLoadMore = false}) async {
     print('====================searchByFilter: ${filterParams.value.page}, ${filterParams.value}');
-    if (isInitialized) isLoading.value = true;
-    var result = await appController.apiClient.searchByFilter(filterParams.value);
+    var result = await fetchData();
     filterParams.value.page = filterParams.value.page + 1;
-    searchResults.addAll(result.data);
-    final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
-    if (!isInitialized) {
-      loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
+    if (!isLoadMore) {
+      searchResults.value = result.data;
     } else {
-      isInitialized = false;
+      searchResults.addAll(result.data);
+      final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
+      loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
     }
-    isLoading.value = false;
   }
 
   filter (Map<String, dynamic> data) async {
@@ -65,9 +67,8 @@ class ListController extends GetxController {
       ...data,
       'page': 1,
     });
-    searchResults.clear();
+    // searchResults.clear();
     loadController.resetFooter();
-    isInitialized = true;
     searchByFilter();
   }
 

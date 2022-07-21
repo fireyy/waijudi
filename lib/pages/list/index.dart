@@ -24,7 +24,7 @@ class List extends StatelessWidget {
             noMoreRefresh:true,
             controller: controller.loadController,
             onLoad: () async {
-              await controller.searchByFilter();
+              await controller.searchByFilter(isLoadMore: true);
             },
             child: CustomScrollView(
               controller: controller.scrollController,
@@ -80,7 +80,7 @@ class List extends StatelessWidget {
                 Obx(
                   () {
                     return 
-                      controller.isLoading.value ? SliverToBoxAdapter(child: Loading()) : controller.searchResults.isEmpty ? SliverToBoxAdapter(child: EmptyTip()) : SliverList(
+                      controller.searchResults.isEmpty ? SliverToBoxAdapter(child: EmptyTip()) : SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           final VideoItem item = controller.searchResults.elementAt(index);

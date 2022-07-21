@@ -50,7 +50,7 @@ class ListVideoCheckbox extends StatelessWidget {
           confirmDismiss: () async {
             return Future(() {
               // 震动反馈
-              HapticFeedback.vibrate();
+              HapticFeedback.lightImpact();
               onDismissed('delete');
               return true;
             });

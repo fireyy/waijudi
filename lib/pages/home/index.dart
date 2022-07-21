@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:waijudi/widgets/custom_appbar.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/home/controller.dart';
@@ -49,6 +50,8 @@ class Home extends GetView<HomeController> {
         refreshOnStart: true,
         noMoreLoad: true,
         onRefresh: () async {
+          // 震动反馈
+          HapticFeedback.lightImpact();
           await controller.loadCategories();
           return IndicatorResult.success;
         },

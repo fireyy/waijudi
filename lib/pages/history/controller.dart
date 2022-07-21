@@ -81,11 +81,10 @@ class HistoryController extends GetxController {
 
   refreshData () async {
     pageKey.value = 1;
-    searchResults.clear();
     loadController.resetFooter();
     var result = await fetchData();
     if (result != null) {
-      searchResults.addAll(result.data);
+      searchResults.value = result.data;
       loadController.finishRefresh(IndicatorResult.success);
     }
   }
