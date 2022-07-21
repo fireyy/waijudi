@@ -10,6 +10,7 @@ import 'package:waijudi/models/drama.dart';
 import 'package:waijudi/models/filter.dart';
 import 'package:waijudi/util/storage.dart';
 import 'package:waijudi/models/video_detail.dart';
+import 'package:waijudi/models/rank.dart';
 
 class ApiClient extends GetConnect {
   String token = '';
@@ -191,5 +192,16 @@ class ApiClient extends GetConnect {
   // 获取热门搜索关键字
   Future<List<String>> getHotKeywords () async {
     return _get('/web/search_home/getType?pageSize=40&page=1').then((data) => (data as List).map((d) => d['name'] as String).toList());
+  }
+
+  // 获取排行榜分类
+  Future<RankModel> getRankType () async {
+    return _get('/web/rank/getNavigation').then((data) => RankModel.fromJson(data));
+  }
+
+  // 获取排行榜数据
+  Future<SearchResultWithVideoItem> getRankList ({int id = 0, String rank = '', int page = 1, int pageSize = 20}) async {
+    var params = {'type_id': id, 'rank': rank, 'page': page, 'pageSize': 20};
+    return _get('/web/rank/getVod', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 }

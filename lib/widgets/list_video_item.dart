@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/util/utils.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/video_image.dart';
@@ -102,9 +103,7 @@ class ListVideoItem extends StatelessWidget {
     required this.score,
     required this.remarks,
     required this.onTap,
-    this.onChecked,
-    this.isChecked = false,
-    this.isShowCheckbox = false,
+    this.rank = 0,
   }) : super(key: key);
 
   final int id;
@@ -115,9 +114,7 @@ class ListVideoItem extends StatelessWidget {
   final String score;
   final String remarks;
   final VoidCallback onTap;
-  final void Function(int, bool)? onChecked;
-  final bool isChecked;
-  final bool isShowCheckbox;
+  final int rank;
 
   @override
   Widget build(BuildContext context) {
@@ -128,13 +125,18 @@ class ListVideoItem extends StatelessWidget {
         child: SizedBox(
           height: 120,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              isShowCheckbox ? Checkbox(
-                value: isChecked,
-                onChanged: (bool? newValue) {
-                  if (onChecked is Function) onChecked!(id, newValue!);
-                },
+              rank != 0 ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  '$rank',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: rank < 4 ? AppColors.LIGHT_GREEN : AppColors.DARK.withOpacity(0.5),
+                  ),
+                )
               ) : const SizedBox(),
               AspectRatio(
                 aspectRatio: 2/3,
@@ -165,7 +167,7 @@ class ListVideoItem extends StatelessWidget {
   }
 }
 
-Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
+Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index, {int? rank = 0}) {
   return ListVideoItem(
     id: item.id,
     thumbnail: item.vodPic,
@@ -175,5 +177,6 @@ Widget listVideoItemBuilder(BuildContext context, VideoItem item, int index) {
     score: item.vodDoubanScore,
     remarks: item.vodRemarks,
     onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
+    rank: rank ?? 0,
   );
 }

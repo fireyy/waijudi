@@ -11,6 +11,9 @@ class VideoItem {
   String? vodBlurb;
   String? vodActor;
   String? createtime;
+  String? typeName;
+  int? stateId;
+  int? rid;
 
   VideoItem({
     this.id = 0,
@@ -25,6 +28,9 @@ class VideoItem {
     this.vodBlurb = '',
     this.vodActor = '',
     this.createtime = '',
+    this.typeName = '',
+    this.stateId = 0,
+    this.rid = 0,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,6 +47,9 @@ class VideoItem {
       'vod_blurb': vodBlurb,
       'vod_actor': vodActor,
       'createtime': createtime,
+      'type_name': typeName,
+      'state_id': stateId,
+      'rid': rid,
     };
   }
 
@@ -53,8 +62,11 @@ class VideoItem {
       playbackTimes = jsonMap['playback_times'].toInt(),
       vodPic = jsonMap['vod_pic'].toString(),
       vodDoubanScore = (jsonMap['vod_douban_score'] ?? '').toString(),
-      vodRemarks = jsonMap['vod_remarks'].toString(),
+      vodRemarks = (jsonMap['vod_remarks'] ?? '').toString(),
       vodBlurb = (jsonMap['vod_blurb'] ?? '').toString(),
       vodActor = (jsonMap['vod_actor'] ?? '').toString(),
-      createtime = (jsonMap['createtime'] ?? '').toString();
+      createtime = (jsonMap['createtime'] ?? jsonMap['create_time'] ?? '').toString(),
+      typeName = (jsonMap['type_name'] ?? '').toString(),
+      stateId = jsonMap['state_id'] ?? 0,
+      rid = jsonMap['rid'] ?? 0;
 }

@@ -9,14 +9,20 @@ class CustomAppBarAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      enableFeedback: false,
-      icon: Icon(
-        icon,
-        size: 21,
-        color: AppColors.GREEN,
-      ),
-      onPressed: action,
+    return SizedBox(
+      width: 40,
+      height: 30,
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        enableFeedback: false,
+        splashRadius: 1,
+        icon: Icon(
+          icon,
+          size: 24,
+          color: AppColors.DARK,
+        ),
+        onPressed: action,
+      )
     );
   }
 }

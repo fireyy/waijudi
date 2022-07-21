@@ -5,7 +5,7 @@ import 'package:waijudi/pages/home/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
 import 'package:waijudi/pages/home/widgets/list_sections.dart';
-import 'package:waijudi/pages/home/widgets/list_categories.dart';
+import 'package:waijudi/widgets/list_categories.dart';
 import 'package:waijudi/widgets/search_field.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
@@ -28,11 +28,19 @@ class Home extends GetView<HomeController> {
         actions: [
           CustomAppBarAction(
             () => Get.toNamed('/list'),
-            Icons.filter_list_alt,
+            Icons.filter_list,
+          ),
+          CustomAppBarAction(
+            () => Get.toNamed('/rank'),
+            Icons.insights,
           ),
         ],
         height: 85,
-        bottom: ListCategories(),
+        bottom: Obx(() => ListCategories(
+          categories: controller.categories, 
+          selectedCategory: controller.selectedCategory,
+          onSelectCategory: controller.selectCategory,
+        )),
         onMagic: () {
           controller.appController.showConfig();
         },

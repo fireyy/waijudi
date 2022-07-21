@@ -25,7 +25,7 @@ class More extends StatelessWidget {
             actions: [
               CustomAppBarAction(
                 () => Get.toNamed('/list'),
-                Icons.filter_list_alt,
+                Icons.filter_list,
               ),
             ],
           ),
