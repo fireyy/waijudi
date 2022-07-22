@@ -18,7 +18,7 @@ class History extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.LIGHT,
           appBar: CustomAppBar(
-            title: Text('List', style: TextStyle(color: AppColors.DARK),),
+            title: Text('观看历史', style: TextStyle(color: AppColors.DARK),),
             autoLeading: true,
             actions: [
               Obx(() {

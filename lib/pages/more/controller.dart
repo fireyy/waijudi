@@ -32,7 +32,7 @@ class MoreController extends GetxController {
 
   refreshData () async {
     pageKey.value = 1;
-    searchResults.clear();
+    // searchResults.clear();
     loadController.resetFooter();
     var result = await getMore();
     searchResults.value = result.data;
