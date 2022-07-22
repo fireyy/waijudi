@@ -94,7 +94,9 @@ class _PlayerState extends State<Player>
       _curActiveIdx = _curActiveIdx == -1 ? 0 : _curActiveIdx;
     }
     _seekPos = videoDetail.vodTimed;
-    _dramaId = controller.videoList['video']![_curTabIdx]['list'][_curActiveIdx]['name'];
+  if (controller.videoList['video']!.isNotEmpty) {
+      _dramaId = controller.videoList['video']![_curTabIdx]['list'][_curActiveIdx]['name'];
+    }
   }
 
   PreferredSizeWidget? buildAppBar() {
@@ -267,6 +269,7 @@ class _PlayerState extends State<Player>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Column(
         children: [
           FijkView(

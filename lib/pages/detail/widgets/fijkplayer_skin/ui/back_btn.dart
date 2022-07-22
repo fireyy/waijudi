@@ -11,11 +11,15 @@ Widget buildTopBackBtn(widget) {
     highlightColor: Colors.transparent,
     color: Colors.white,
     onPressed: () {
+      if (widget.onCallBack != null && widget.onCallBack is Function) {
+        widget?.onCallBack.call();
+        return;
+      }
       // 判断当前是否全屏，如果全屏，退出
       if (widget.player.value.fullScreen) {
         widget.player.exitFullScreen();
       } else {
-        if (widget.pageContent == null) return null;
+        if (widget.pageContent == null) return;
         widget.player.stop();
         Navigator.pop(widget.pageContent!);
       }

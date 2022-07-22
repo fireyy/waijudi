@@ -30,6 +30,7 @@ class CustomFijkPanel extends StatefulWidget {
   final int startPosition;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
+  final VoidCallback? onCallBack;
 
   CustomFijkPanel({
     required this.player,
@@ -43,6 +44,7 @@ class CustomFijkPanel extends StatefulWidget {
     required this.curTabIdx,
     required this.curActiveIdx,
     required this.startPosition,
+    this.onCallBack,
   });
 
   @override
