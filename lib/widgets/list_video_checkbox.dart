@@ -44,6 +44,7 @@ class ListVideoCheckbox extends StatelessWidget {
       endActionPane: ActionPane(
         extentRatio: 0.2,
         motion: const ScrollMotion(),
+        dragDismissible: false,
         dismissible: DismissiblePane(
           closeOnCancel: true,
           onDismissed: () {},
