@@ -89,8 +89,8 @@ class _PlayerState extends State<Player>
     // 如果是续播，则尝试回到上次的状态
     if (videoDetail.vodTimed > 0 && videoDetail.dramaId != '' && videoDetail.dramaId != controller.videoList['video']![0]['list'][0]['name']) {
       _curTabIdx = controller.lineList.indexWhere((line) => line.vodLineId == videoDetail.vodLineId);
-      _curActiveIdx = controller.videoList['video']![_curTabIdx]['list']!.indexWhere((item) => item['name'] == videoDetail.dramaId);
       _curTabIdx = _curTabIdx == -1 ? 0 : _curTabIdx;
+      _curActiveIdx = controller.videoList['video']![_curTabIdx]['list']!.indexWhere((item) => item['name'] == videoDetail.dramaId);
       _curActiveIdx = _curActiveIdx == -1 ? 0 : _curActiveIdx;
     }
     _seekPos = videoDetail.vodTimed;
