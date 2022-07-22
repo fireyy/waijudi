@@ -56,7 +56,7 @@ class RankPage extends GetView<RankController> {
         },
         child: CustomScrollView(
           slivers: [
-            Obx(() => controller.isLoading.value ? const SliverToBoxAdapter(child: Loading()) : SliverList(
+            Obx(() => SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   var data = controller.resultData.elementAt(index);

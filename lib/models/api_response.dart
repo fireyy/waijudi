@@ -9,6 +9,15 @@ class ApiResponse {
 
   ApiResponse({this.code = 1, this.msg = ''});
 
+  toJson() {
+    return {
+      'code': code,
+      'msg': msg,
+      'url': url,
+      'data': data,
+    };
+  }
+
   ApiResponse.fromJson(Map jsonMap)
       : code = jsonMap['code'].toInt(),
         msg = jsonMap['msg'].toString(),

@@ -37,7 +37,7 @@ class RankController extends GetxController {
 
   fetchData () async {
     pageKey.value = 1;
-    resultData.clear();
+    // resultData.clear();
     loadController.resetFooter();
     isLoading.value = true;
     await loadRankList(isLoadMore: false);
@@ -58,7 +58,11 @@ class RankController extends GetxController {
     print('====================loadRankList: ${pageKey.value}, rank: $selectedRank, category: ${selectedCategory.name}');
     var result = await appController.apiClient.getRankList(id: selectedCategory.id, rank: selectedRank, page: pageKey.value);
     pageKey.value = pageKey.value + 1;
-    resultData.addAll(result.data);
+    if (isLoadMore) {
+      resultData.addAll(result.data);
+    } else {
+      resultData.value = result.data;
+    }
     final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
     if (isLoadMore) loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
   }
