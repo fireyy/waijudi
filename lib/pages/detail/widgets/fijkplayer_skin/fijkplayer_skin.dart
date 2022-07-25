@@ -521,10 +521,10 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             widget.viewSize.height,
           )
         : Rect.fromLTRB(
-            max(0.0, widget.texturePos.left),
-            max(0.0, widget.texturePos.top),
-            min(widget.viewSize.width, widget.texturePos.right),
-            min(widget.viewSize.height, widget.texturePos.bottom),
+            min(0.0, widget.texturePos.left),
+            min(0.0, widget.texturePos.top),
+            max(widget.viewSize.width, widget.texturePos.right),
+            max(widget.viewSize.height, widget.texturePos.bottom),
           );
 
     List<Widget> ws = [];
