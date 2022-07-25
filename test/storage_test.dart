@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:waijudi/util/storage.dart';
 import 'package:waijudi/models/filter.dart';
+import 'package:waijudi/models/rank.dart';
+import 'package:waijudi/models/category.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -63,5 +65,16 @@ void main() {
     var urls = ['http://www.baidu.com', 'http://www.google.com'];
     await Storage.saveApiUrls(urls);
     expect(urls, Storage.apiUrls);
+  });
+
+  test('storage saveRankType test', () async {
+    var rank = RankModel(
+      rank: ['typename'],
+      type: [Category(id: 1, name: 'valuename')],
+    );
+    await Storage.saveRankType(rank);
+    var rank2 = Storage.getRankType();
+    expect(rank.rank.first, rank2.rank.first);
+    expect(rank.type.first.id, rank2.type.first.id);
   });
 }

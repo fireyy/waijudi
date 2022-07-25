@@ -4,6 +4,11 @@ class Category {
 
   Category({this.id = 0, this.name = ''});
 
+  toJson() => {
+    'id': id,
+    'name': name,
+  };
+
   Category.fromJson(Map jsonMap)
     : id = (jsonMap['id'] == '' ? 0 : jsonMap['id']).toInt(),
       name = jsonMap['name'].toString();

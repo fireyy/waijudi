@@ -4,6 +4,7 @@ import 'package:waijudi/models/rank.dart';
 import 'package:waijudi/models/category.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:waijudi/util/storage.dart';
 
 class RankController extends GetxController {
   AppController appController = Get.find();
@@ -27,10 +28,15 @@ class RankController extends GetxController {
 
   loadCategories() async {
     isLoading.value = true;
-    RankModel dataCategories = await appController.apiClient.getRankType();
-    categories.value = dataCategories;
-    _selectedCategory.value = dataCategories.type.first;
-    _selectedRank.value = dataCategories.rank.first;
+    if (Storage.hasData('ranktype')) {
+      categories.value = Storage.getRankType();
+      appController.apiClient.getRankType().then((data) => Storage.saveRankType(data));
+    } else {
+      categories.value = await appController.apiClient.getRankType();
+      await Storage.saveRankType(categories);
+    } 
+    _selectedCategory.value = categories.value.type.first;
+    _selectedRank.value = categories.value.rank.first;
     await loadRankList(isLoadMore: false);
     isLoading.value = false;
   }
