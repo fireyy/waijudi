@@ -33,7 +33,8 @@ class CustomFijkPanel extends StatefulWidget {
   final VideoSourceFormat? videoFormat;
   final VoidCallback? onCallBack;
 
-  CustomFijkPanel({
+  const CustomFijkPanel({
+    Key? key,
     required this.player,
     required this.viewSize,
     required this.texturePos,
@@ -46,7 +47,7 @@ class CustomFijkPanel extends StatefulWidget {
     required this.curActiveIdx,
     required this.startPosition,
     this.onCallBack,
-  });
+  }) : super(key: key);
 
   @override
   _CustomFijkPanelState createState() => _CustomFijkPanelState();
@@ -87,11 +88,11 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
     // init animation
     _animation = Tween(
-      begin: Offset(1, 0),
+      begin: const Offset(1, 0),
       end: Offset.zero,
     ).animate(_animationController!);
     // is not null
-    if (_tabLength < 1) return null;
+    if (_tabLength < 1) return;
     // init player state
     setState(() {
       _playerState = player.value.state;
@@ -102,7 +103,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       });
     }
     // is not null
-    if (_tabLength < 1) return null;
+    if (_tabLength < 1) return;
     // autoplay and existurl
     if (showConfig.isAutoPlay && !_isPlaying) {
       int curTabIdx = widget.curTabIdx;
@@ -153,7 +154,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
         _drawerState = state;
       });
     }
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       _animationController!.forward();
     });
   }
@@ -200,7 +201,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       child: Container(
         child: AnimatedOpacity(
           opacity: _hideLockStuff ? 0.0 : 0.7,
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -218,7 +219,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                     _hideLockStuff = true;
                   });
                 },
-                icon: Icon(Icons.lock),
+                icon: const Icon(Icons.lock),
                 color: Colors.white,
               ),
             ),
@@ -262,9 +263,9 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   // build 剧集
   Widget _buildPlayDrawer() {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(0, 0, 0, 0.4),
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.4),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
+        backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
         automaticallyImplyLeading: false,
         elevation: 0.1,
         title: _tabLength > 1 ? TabBar(
@@ -362,13 +363,13 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                 : 0,
           ),
           // 失败图标
-          Icon(
+          const Icon(
             Icons.error,
             size: 50,
             color: Colors.white,
           ),
           // 错误信息
-          Text(
+          const Text(
             "播放失败，您可以点击重试！",
             style: TextStyle(
               color: Colors.white,
@@ -376,7 +377,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           // 重试
           ElevatedButton(
             style: ButtonStyle(
@@ -392,7 +393,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
               // 切换视频
               changeCurPlayVideo(widget.curTabIdx, widget.curActiveIdx);
             },
-            child: Text(
+            child: const Text(
               "点击重试",
               style: TextStyle(color: Colors.black),
             ),
@@ -404,10 +405,10 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // 加载中slot
   Widget _buildLoadingStateSlotWidget() {
-    return SizedBox(
+    return const SizedBox(
       width: barHeight * 0.8,
       height: barHeight * 0.8,
-      child: const CircularProgressIndicator(
+      child: CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation(Colors.white),
       ),
     );
@@ -417,8 +418,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   Widget _buildIdleStateSlotWidget() {
     return IconButton(
       iconSize: barHeight * 1.2,
-      icon: Icon(Icons.play_arrow, color: Colors.white),
-      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      icon: const Icon(Icons.play_arrow, color: Colors.white),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       onPressed: () async {
         int newTabIdx = widget.curTabIdx;
         int newActiveIdx = widget.curActiveIdx;
@@ -516,7 +517,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
         );
       } else {
         ws.add(
-          gestureDetector(
+          GestureDetectorLayer(
             curActiveIdx: widget.curActiveIdx,
             curTabIdx: widget.curTabIdx,
             onChangeVideo: widget.onChangeVideo,
