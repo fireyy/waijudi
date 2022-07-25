@@ -444,7 +444,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
         padding: const EdgeInsets.all(10),
         child: Align(
           child: Text(
-            '继续从上次${Duration(seconds: widget.startPosition).toString().split(".")[0]}开始播放',
+            '上次看到${_videoSourceTabs.video![widget.curTabIdx]!.list![widget.curActiveIdx]!.name} ${Duration(seconds: widget.startPosition).toString().split(".")[0]}，点击继续播放',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 12,

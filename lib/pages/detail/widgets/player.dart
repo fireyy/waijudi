@@ -74,7 +74,7 @@ class _PlayerState extends State<Player>
 
     String nextVideoUrl =
         _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.url!;
-    String nextDecVideoUrl = await controller.getVodDecrypt(nextVideoUrl);
+    String nextDecVideoUrl = nextVideoUrl.contains('wsSecret') ? nextVideoUrl : await controller.getVodDecrypt(nextVideoUrl);
     // 切换播放源
     await player.reset().then((_) async {
       await player.setDataSource(nextDecVideoUrl);
