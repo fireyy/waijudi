@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:waijudi/util/encrypt.dart';
-import 'package:waijudi/util/pretty_dio_logger.dart';
 
 import 'package:waijudi/models/api_response.dart';
 import 'package:waijudi/models/searchresult.dart';
@@ -48,7 +47,7 @@ class ApiClient {
         handler.next(response);
       },
     ));
-    dio.interceptors.add(LogInterceptor(requestHeader: false, requestBody: false, responseBody: false));
+    dio.interceptors.add(LogInterceptor(requestHeader: false, requestBody: false, responseHeader: false, responseBody: false));
     return dio;
   }
 

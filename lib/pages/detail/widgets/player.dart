@@ -8,6 +8,7 @@ import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/fijkplayer_skin.dar
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/schema.dart' show VideoSourceFormat;
 import 'package:waijudi/models/video_detail.dart';
 import 'package:waijudi/util/time.dart';
+import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/ui/episode_list.dart';
 
 // 定制UI配置项
 class PlayerShowConfig implements ShowConfigAbs {
@@ -64,10 +65,29 @@ class _PlayerState extends State<Player>
   }
 
   // 钩子函数，用于更新状态
-  void onChangeVideo(int curTabIdx, int curActiveIdx) {
+  void onChangeVideo (int tabIdx, int activeIdx, {int startPosition = 0, void Function(int, int)? onChange}) async {
     setState(() {
-      _curTabIdx = curTabIdx;
-      _curActiveIdx = curActiveIdx;
+      _curTabIdx = tabIdx;
+      _curActiveIdx = activeIdx;
+      _dramaId = _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.name ?? '';
+    });
+
+    String nextVideoUrl =
+        _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.url!;
+    String nextDecVideoUrl = await controller.getVodDecrypt(nextVideoUrl);
+    // 切换播放源
+    await player.reset().then((_) async {
+      await player.setDataSource(nextDecVideoUrl);
+      FijkOption fijkOption = FijkOption();
+      fijkOption.setPlayerOption("start-on-prepared", 1);
+      if (startPosition > 0) fijkOption.setPlayerOption("seek-at-start", startPosition * 1000);
+      await player.applyOptions(fijkOption);
+      await player.prepareAsync();
+
+      // 回调
+      if (onChange is Function) {
+        onChange!(tabIdx, activeIdx);
+      }
     });
   }
 
@@ -219,51 +239,9 @@ class _PlayerState extends State<Player>
 
   // 剧集 tabCon
   List<Widget> createTabConList() {
-    List<Widget> list = [];
-    _videoSourceTabs!.video!.asMap().keys.forEach((int tabIdx) {
-      List<Widget> playListBtns = _videoSourceTabs!.video![tabIdx]!.list!
-          .asMap()
-          .keys
-          .map((int activeIdx) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
-                  tabIdx == _curTabIdx && activeIdx == _curActiveIdx
-                      ? AppColors.LIGHT_GREEN
-                      : AppColors.LIGHT_GREY),
-            ),
-            onPressed: () => _selectToPlay(tabIdx, activeIdx),
-            child: Text(
-              _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.name!,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }).toList();
-      //
-      list.add(
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: playListBtns,
-            ),
-          ),
-        ),
-      );
+    return buildEpisodeList(_videoSourceTabs, _curTabIdx, _curActiveIdx, (tabIdx, activeIdx) {
+      onChangeVideo(tabIdx, activeIdx);
     });
-    return list;
   }
 
   @override
@@ -273,8 +251,8 @@ class _PlayerState extends State<Player>
       child: Column(
         children: [
           FijkView(
-            height: 260,
-            color: Colors.red,
+            height: 220,
+            color: Colors.black,
             fit: FijkFit.contain,
             player: player,
             onDispose: (FijkData? data) {
@@ -326,23 +304,5 @@ class _PlayerState extends State<Player>
         ],
       )
     );
-  }
-
-  void _selectToPlay (int tabIdx, int activeIdx) async {
-    setState(() {
-      _curTabIdx = tabIdx;
-      _curActiveIdx = activeIdx;
-    });
-    String nextVideoUrl =
-        _videoSourceTabs!.video![tabIdx]!.list![activeIdx]!.url!;
-    String nextDecVideoUrl = await controller.getVodDecrypt(nextVideoUrl);
-    // 切换播放源
-    // 如果不是自动开始播放，那么先执行stop
-    if (player.value.state == FijkState.completed) {
-      await player.stop();
-    }
-    await player.reset().then((_) async {
-      player.setDataSource(nextDecVideoUrl, autoPlay: true);
-    });
   }
 }

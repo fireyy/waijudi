@@ -38,6 +38,7 @@ class gestureDetector extends StatefulWidget {
   final Function changeLockState;
   final ShowConfigAbs showConfig;
   final VideoSourceFormat? videoFormat;
+  final VoidCallback? onCallBack;
   gestureDetector({
     Key? key,
     required this.player,
@@ -52,6 +53,7 @@ class gestureDetector extends StatefulWidget {
     required this.videoFormat,
     required this.changeDrawerState,
     required this.changeLockState,
+    this.onCallBack,
   }) : super(key: key);
 
   @override
@@ -345,17 +347,8 @@ class gestureDetectorState extends State<gestureDetector> {
     setState(() {
       _buffering = false;
     });
-    player.reset().then((_) {
-      _speed = speed = 1.0;
-      String curTabActiveUrl =
-          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
-      player.setDataSource(
-        curTabActiveUrl,
-        autoPlay: true,
-      );
-      // 回调
-      widget.onChangeVideo!(tabIdx, activeIdx);
-    });
+    _speed = speed = 1.0;
+    widget.onChangeVideo!(tabIdx, activeIdx);
   }
 
   void _playOrPause() {

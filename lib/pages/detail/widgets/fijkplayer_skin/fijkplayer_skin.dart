@@ -11,6 +11,7 @@ import './schema.dart' show VideoSourceFormat;
 import './config.dart';
 import './ui/top_bar.dart';
 import './gesture_detector.dart';
+import './ui/episode_list.dart';
 
 bool lockStuff = false;
 bool hideLockStuff = false;
@@ -65,6 +66,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   FijkState? _playerState;
   bool _isPlaying = false;
   bool _showSeekTip = false;
+  int _tabLength = 0;
 
   StreamSubscription? _currentPosSubs;
 
@@ -73,9 +75,10 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   late TabController _tabController;
 
   void initEvent() {
+    _tabLength = _videoSourceTabs.video!.length;
     _showSeekTip = widget.startPosition > 0;
     _tabController = TabController(
-      length: _videoSourceTabs.video!.length,
+      length: _tabLength,
       vsync: this,
     );
     _animationController = AnimationController(
@@ -88,7 +91,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       end: Offset.zero,
     ).animate(_animationController!);
     // is not null
-    if (_videoSourceTabs.video!.length < 1) return null;
+    if (_tabLength < 1) return null;
     // init player state
     setState(() {
       _playerState = player.value.state;
@@ -99,7 +102,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       });
     }
     // is not null
-    if (_videoSourceTabs.video!.length < 1) return null;
+    if (_tabLength < 1) return null;
     // autoplay and existurl
     if (showConfig.isAutoPlay && !_isPlaying) {
       int curTabIdx = widget.curTabIdx;
@@ -168,19 +171,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx, { int startPosition = 0 }) async {
-    // await player.stop();
-    await player.reset().then((_) async {
-      String curTabActiveUrl =
-          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
-      await player.setDataSource(curTabActiveUrl);
-      FijkOption fijkOption = FijkOption();
-      fijkOption.setPlayerOption("start-on-prepared", 1);
-      if (startPosition > 0) fijkOption.setPlayerOption("seek-at-start", startPosition * 1000);
-      await player.applyOptions(fijkOption);
-      await player.prepareAsync();
-      // 回调
-      widget.onChangeVideo!(tabIdx, activeIdx);
-    });
+    widget.onChangeVideo!(tabIdx, activeIdx, startPosition: startPosition);
   }
 
   void _cancelAndRestartLockTimer() {
@@ -276,89 +267,42 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
         backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
         automaticallyImplyLeading: false,
         elevation: 0.1,
-        title: TabBar(
+        title: _tabLength > 1 ? TabBar(
           labelColor: Colors.white,
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
           unselectedLabelColor: Colors.white,
-          unselectedLabelStyle: TextStyle(
+          unselectedLabelStyle: const TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
           indicator: BoxDecoration(
             color: Colors.purple[700],
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           tabs:
               _videoSourceTabs.video!.map((e) => Tab(text: e!.name!)).toList(),
           isScrollable: true,
           controller: _tabController,
-        ),
+        ) : const SizedBox(),
       ),
       body: Container(
-        color: Color.fromRGBO(0, 0, 0, 0.5),
-        child: TabBarView(
+        color: const Color.fromRGBO(0, 0, 0, 0.5),
+        child: _tabLength > 1 ? TabBarView(
           controller: _tabController,
           children: _createTabConList(),
-        ),
+        ) : ListView(children: _createTabConList(),),
       ),
     );
   }
 
   // 剧集 tabCon
   List<Widget> _createTabConList() {
-    List<Widget> list = [];
-    _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
-      List<Widget> playListBtns = _videoSourceTabs.video![tabIdx]!.list!
-          .asMap()
-          .keys
-          .map((int activeIdx) {
-        return Padding(
-          padding: EdgeInsets.only(left: 5, right: 5),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
-                  tabIdx == widget.curTabIdx && activeIdx == widget.curActiveIdx
-                      ? Colors.red
-                      : Colors.blue),
-            ),
-            onPressed: () {
-              int newTabIdx = tabIdx;
-              int newActiveIdx = activeIdx;
-              // 切换播放源
-              changeCurPlayVideo(newTabIdx, newActiveIdx);
-            },
-            child: Text(
-              _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }).toList();
-      //
-      list.add(
-        SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: playListBtns,
-            ),
-          ),
-        ),
-      );
+    return buildEpisodeList(_videoSourceTabs, widget.curTabIdx, widget.curActiveIdx, (tabIdx, activeIdx) {
+      changeCurPlayVideo(tabIdx, activeIdx);
     });
-    return list;
   }
 
   // 可以共用的架子
