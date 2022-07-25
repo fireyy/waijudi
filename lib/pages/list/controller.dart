@@ -24,12 +24,15 @@ class ListController extends GetxController {
   }
 
   getType () async {
-    if (Storage.hasData('filterType')) {
-      filters.value = Storage.getFilter();
-    } else {
-      filters.value = await appController.apiClient.getType();
-      await Storage.saveFilter(filters);
-    }
+    // if (Storage.hasData('filterType')) {
+    //   filters.value = Storage.getFilter();
+    // } else {
+    //   filters.value = await appController.apiClient.getType();
+    //   await Storage.saveFilter(filters);
+    // }
+    if (Storage.hasData('filterType')) filters.value = Storage.getFilter();
+    filters.value = await appController.apiClient.getType();
+    await Storage.saveFilter(filters);
     for (var filter in filters) {
       filterMap.addAll({
         filter.name: filter.list.first.id

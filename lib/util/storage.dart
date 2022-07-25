@@ -24,7 +24,7 @@ class Storage {
 
   static String get token => _storage.read<String>('token') ?? '';
 
-  static Future<void> saveFilter(dynamic value) => _storage.write('filterType', value.toJson());
+  static Future<void> saveFilter(dynamic value) => _storage.write('filterType', value.map((v) => v.toJson()).toList());
 
   static List<FilterModel> getFilter() => (_storage.read<List<dynamic>>('filterType') as List).map((d) => FilterModel.fromJson(d)).toList();
 

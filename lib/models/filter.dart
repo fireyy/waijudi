@@ -18,9 +18,9 @@ class Filter {
 
 class FilterModel {
   String name;
-  List<Filter> list = [];
+  List<Filter> list;
 
-  FilterModel({this.name = ''});
+  FilterModel({this.name = '', this.list = const []});
 
   Map<String, dynamic> toJson() {
     return {
