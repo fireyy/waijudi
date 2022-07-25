@@ -43,7 +43,7 @@ class DetailController extends GetxController {
       videoList['video'] = list;
     } catch (error) {
       // Get.log(error.toString());
-      rethrow;
+      // rethrow;
     }
   }
 
