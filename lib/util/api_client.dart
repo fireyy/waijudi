@@ -48,15 +48,7 @@ class ApiClient {
         handler.next(response);
       },
     ));
-    dio.interceptors.add(LogInterceptor(requestHeader: true, requestBody: true, responseBody: true));
-    // dio.interceptors.add(PrettyDioLogger(
-    //     requestHeader: true,
-    //     requestBody: true,
-    //     responseBody: true,
-    //     responseHeader: false,
-    //     error: true,
-    //     compact: true,
-    //     maxWidth: 90));
+    dio.interceptors.add(LogInterceptor(requestHeader: false, requestBody: false, responseBody: false));
     return dio;
   }
 
