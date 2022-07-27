@@ -214,15 +214,15 @@ class GestureDetectorState extends State<GestureDetectorLayer> {
     }
   }
 
-  _onHorizontalDragStart(detills) {
+  _onHorizontalDragStart(details) {
     setState(() {
-      updatePrevDx = detills.globalPosition.dx;
+      updatePrevDx = details.globalPosition.dx;
       updatePosX = _currentPos.inMilliseconds;
     });
   }
 
-  _onHorizontalDragUpdate(detills) {
-    double curDragDx = detills.globalPosition.dx;
+  _onHorizontalDragUpdate(details) {
+    double curDragDx = details.globalPosition.dx;
     // 确定当前是前进或者后退
     int cdx = curDragDx.toInt();
     int pdx = updatePrevDx!.toInt();
@@ -262,7 +262,7 @@ class GestureDetectorState extends State<GestureDetectorLayer> {
     });
   }
 
-  _onHorizontalDragEnd(detills) {
+  _onHorizontalDragEnd(details) {
     player.seekTo(_dargPos.inMilliseconds);
     setState(() {
       _isHorizontalMove = false;
@@ -272,13 +272,13 @@ class GestureDetectorState extends State<GestureDetectorLayer> {
     });
   }
 
-  _onVerticalDragStart(detills) async {
+  _onVerticalDragStart(details) async {
     double clientW = widget.viewSize.width;
-    double curTouchPosX = detills.globalPosition.dx;
+    double curTouchPosX = details.globalPosition.dx;
 
     setState(() {
       // 更新位置
-      updatePrevDy = detills.globalPosition.dy;
+      updatePrevDy = details.globalPosition.dy;
       // 是否左边
       isDargVerLeft = (curTouchPosX > (clientW / 2)) ? false : true;
     });
@@ -302,9 +302,9 @@ class GestureDetectorState extends State<GestureDetectorLayer> {
     }
   }
 
-  _onVerticalDragUpdate(detills) {
+  _onVerticalDragUpdate(details) {
     if (!varTouchInitSuc) return null;
-    double curDragDy = detills.globalPosition.dy;
+    double curDragDy = details.globalPosition.dy;
     // 确定当前是前进或者后退
     int cdy = curDragDy.toInt();
     int pdy = updatePrevDy!.toInt();
@@ -334,7 +334,7 @@ class GestureDetectorState extends State<GestureDetectorLayer> {
     });
   }
 
-  _onVerticalDragEnd(detills) {
+  _onVerticalDragEnd(details) {
     setState(() {
       varTouchInitSuc = false;
     });
