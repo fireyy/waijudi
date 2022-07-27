@@ -13,7 +13,6 @@ import 'package:waijudi/models/video_detail.dart';
 import 'package:waijudi/models/rank.dart';
 
 class ApiClient {
-  String token = '';
   @override
   static final _client = ApiClient._internal();
   final _http = ApiClient.createDio();
@@ -26,7 +25,7 @@ class ApiClient {
 
   static Dio createDio() {
     var options = BaseOptions(
-      baseUrl: 'https://waijudi.ywhuilong.com',
+      baseUrl: Storage.currentApiUrl,
       connectTimeout: 15000,
       receiveTimeout: 15000,
       headers: {
@@ -53,7 +52,6 @@ class ApiClient {
 
   setToken (String value) {
     if (value != '') {
-      token = value;
       _http.options.headers['token'] = value;
       Storage.saveToken(value);
     }

@@ -35,7 +35,7 @@ class Storage {
 
   static Future<void> saveCurrentApiUrl(String value) => _storage.write('currentApiUrl', value);
 
-  static String get currentApiUrl => _storage.read<String>('currentApiUrl') ?? apiUrls[0];
+  static String get currentApiUrl => _storage.read<String>('currentApiUrl') ?? 'https://api.mdwifi.com:778';
 
   static Future<void> saveRankType(dynamic value) => _storage.write('ranktype', value.toJson());
 

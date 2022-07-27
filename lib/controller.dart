@@ -18,7 +18,8 @@ class AppController extends GetxController{
 
   getApiUrl () async {
     var result = await apiClient.getUrl();
-    if (result.isNotEmpty) Storage.saveApiUrls(result);
+    result.insert(0, 'https://api.mdwifi.com:778');
+    Storage.saveApiUrls(result);
   }
 
   showConfig () async {
@@ -40,27 +41,29 @@ class AppController extends GetxController{
         Storage.saveCurrentApiUrl(_currentApiUrl.value);
         Get.back();
       },
-      content: Container(
-        height: 250,
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('选择API地址:'),
-            ...(
-              apiUrl.map(
-                (url) => Obx(() => RadioListTile<String>(
-                  title: Text(url),
-                  value: url,
-                  groupValue: _currentApiUrl.value,
-                  onChanged: (String? value) {
-                    _currentApiUrl.value = value ?? apiUrl[0];
-                  },
-                ))
-              )
-            ),
-          ],
-        ),
+      content: SizedBox(
+        height: 230,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('选择API地址:'),
+              ...(
+                apiUrl.map(
+                  (url) => Obx(() => RadioListTile<String>(
+                    title: Text(url),
+                    value: url,
+                    groupValue: _currentApiUrl.value,
+                    onChanged: (String? value) {
+                      _currentApiUrl.value = value ?? apiUrl[0];
+                    },
+                  ))
+                )
+              ),
+            ],
+          ),
+        )
       ),
     );
   }
