@@ -35,7 +35,7 @@ class More extends StatelessWidget {
               await controller.refreshData();
             },
             onLoad: () async {
-              await controller.loadMore();
+              await controller.loadData();
             },
             child: CustomScrollView(
               slivers: [

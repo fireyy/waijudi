@@ -21,22 +21,24 @@ class MoreController extends GetxController {
 
   getMore() async => await appController.apiClient.getMore(id: id, name: name, page: pageKey.value);
 
-  loadMore() async {
+  loadData({bool isLoadMore = true}) async {
     print('====================loadMore: ${pageKey.value}, id: $id, name: $name');
     var result = await getMore();
     pageKey.value = pageKey.value + 1;
-    searchResults.addAll(result.data);
-    final isLastPage = result.currentPage == result.lastPage;
-    loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
+    if (isLoadMore) {
+      searchResults.addAll(result.data);
+      final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
+      loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
+    } else {
+      searchResults.value = result.data;
+      loadController.finishRefresh(IndicatorResult.success);
+    }
   }
 
   refreshData () async {
     pageKey.value = 1;
-    // searchResults.clear();
     loadController.resetFooter();
-    var result = await getMore();
-    searchResults.value = result.data;
-    loadController.finishRefresh(IndicatorResult.success);
+    await loadData(isLoadMore: false);
   }
 
   @override
