@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/util/storage.dart';
 import 'package:waijudi/pages/detail/widgets/fijkplayer_skin/ui/top_bar.dart';
+import 'package:waijudi/widgets/skeleton.dart';
 
 class Param {
   String playerTitle;
@@ -25,7 +26,7 @@ class PlayerSkeleton extends StatelessWidget {
         children: [
           Container(
             alignment: Alignment.topLeft,
-            height: 260,
+            height: 220,
             color: Colors.black,
             child: buildTopBar(Param(
               playerTitle: videoName,
@@ -51,11 +52,36 @@ class PlayerSkeleton extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 150,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                  Skeleton(
+                    padding: 5,
+                    style: SkeletonStyle.text,
+                    width: MediaQuery.of(context).size.width,
+                    height: 14,
+                  ),
+                  const Skeleton(
+                    padding: 5,
+                    style: SkeletonStyle.text,
+                    width: 200,
+                    height: 14,
+                  ),
+                  const Skeleton(
+                    padding: 5,
+                    style: SkeletonStyle.text,
+                    width: 100,
+                    height: 14,
+                  ),
+                  Wrap(
+                    children: [
+                      ...([
+                        for (int i = 0; i < 10; i++)
+                          const Skeleton(
+                            padding: 5,
+                            style: SkeletonStyle.text,
+                            width: 70,
+                            height: 40,
+                          ),
+                      ]),
+                    ],
                   )
                 ],
               ),
