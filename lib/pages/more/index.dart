@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:waijudi/pages/more/controller.dart';
 import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
-import 'package:waijudi/pages/home/widgets/item_videos.dart';
+import 'package:waijudi/widgets/item_videos.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 class More extends StatelessWidget {
