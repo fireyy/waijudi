@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/util/colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:waijudi/util/utils.dart';
-
-import 'package:waijudi/controller.dart';
+import 'package:waijudi/widgets/video_image.dart';
 
 class ListItem extends StatelessWidget {
-  final AppController appController = Get.find();
   final VideoItem item;
-  ListItem(this.item, {Key? key}) : super(key: key);
+  const ListItem(this.item, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => goToDetail(item.name, {'id': '${item.id}'}),
       child: Container(
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: AppColors.DARK,
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(item.vodPic),
-            fit: BoxFit.cover,
-          ),
           boxShadow: <BoxShadow>[
             BoxShadow(
               blurRadius: 7,
@@ -36,6 +29,16 @@ class ListItem extends StatelessWidget {
         ),
         child: Stack(
           children: <Widget>[
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: VideoImage(
+                item.vodPic,
+                fit: BoxFit.cover,
+              ),
+            ),
             Positioned(
               bottom: 5,
               left: 5,

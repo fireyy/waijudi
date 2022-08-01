@@ -171,7 +171,7 @@ class ApiClient {
 
   // 获取更多页面数据
   Future<SearchResultWithVideoItem> getMore ({int id = 0, String name = '', int page = 1, int pageSize = 20}) async {
-    var params = {'id': id == 0 ? '' : id, 'name': name, 'page': page, 'pageSize': 20};
+    var params = {'id': id, 'name': name, 'page': page, 'pageSize': 20};
     return _get('/web/video_home/getMore', params: params).then((data) => SearchResultWithVideoItem.fromJson(data));
   }
 

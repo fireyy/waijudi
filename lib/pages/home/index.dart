@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:waijudi/models/category.dart';
 import 'package:waijudi/widgets/custom_appbar.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/home/controller.dart';
@@ -12,11 +13,6 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
-
-  Future<bool> onRefresh() async {
-    await controller.loadCategories();
-    return true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +53,21 @@ class Home extends GetView<HomeController> {
         },
         child: CustomScrollView(
           slivers: [
-            ListSections(),
+            Obx(() {
+              return SliverList(delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    var section = controller.homeData[index];
+                    return ListSections(section, handleMore: (id, name) {
+                      Get.toNamed('/more', parameters: {
+                        'id': '${id == 0 ? controller.selectedCategory.id : id}',
+                        'name': name,
+                      });
+                    });
+                  },
+                  childCount: controller.homeData.length,
+                ),
+              );
+            }),
           ],
         ),
       ),

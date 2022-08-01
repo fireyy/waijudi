@@ -146,8 +146,6 @@ class ListVideoItem extends StatelessWidget {
                 child: VideoImage(
                   thumbnail,
                   fit: BoxFit.cover,
-                  width: 80,
-                  height: 120,
                 ),
               ),
               Expanded(

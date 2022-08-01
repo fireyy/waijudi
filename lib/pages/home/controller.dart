@@ -10,7 +10,7 @@ class HomeController extends GetxController {
   RxList<Category> categories = RxList<Category>([]);
   final Rx<Category> _selectedCategory = Rx<Category>(Category());
   Category get selectedCategory => _selectedCategory.value;
-  RxList<Section> homeData = RxList<Section>([]);
+  final homeData = RxList<Section>([]);
 
   @override
   void onInit() {

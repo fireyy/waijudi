@@ -1,59 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:waijudi/util/colors.dart';
-import 'package:waijudi/pages/home/controller.dart';
-import 'list_videos.dart';
+import 'package:waijudi/models/section.dart';
+import 'package:waijudi/widgets/list_videos.dart';
 
 class ListSections extends StatelessWidget {
-  final HomeController controller = Get.find();
-  ListSections({Key? key}) : super(key: key);
+  final Section data;
+  final Function(int, String) handleMore;
+  const ListSections(this.data, {Key? key, required this.handleMore}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return SliverList(delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          var section = controller.homeData[index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  left: 25,
-                  right: 25,
-                  bottom: 10,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 25,
+            right: 25,
+            bottom: 10,
+          ),
+          child: GestureDetector(
+            onTap: () {
+              handleMore(data.id, data.name);
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(data.name, style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.DARK,
+                  )),
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed('/more', parameters: {
-                      'id': '${section.id}',
-                      'name': section.name,
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(section.name, style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.DARK,
-                        )),
-                      ),
-                      Text('更多»', style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.DARK,
-                      )),
-                    ],
-                  )
-                ),
-              ),
-              VideoList(section.video)
-            ]
-          );
-        },
-        childCount: controller.homeData.length,
-      ));
-    });
+                Text('更多»', style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.DARK,
+                )),
+              ],
+            )
+          ),
+        ),
+        VideoList(data.video)
+      ]
+    );
   }
 }
