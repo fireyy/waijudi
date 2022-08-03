@@ -20,7 +20,7 @@ class EmptyTip extends StatelessWidget {
               size: 50,
             ),
             Text(text ?? '暂无数据'),
-            action!,
+            action ?? SizedBox(),
           ],
         ),
       ),

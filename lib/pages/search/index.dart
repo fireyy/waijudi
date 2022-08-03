@@ -50,7 +50,12 @@ class Search extends StatelessWidget {
               return Obx(
                 () {
                   if (controller.isLoading.value) {
-                    return Loading();
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Loading(),
+                      ],
+                    );
                   } else if (controller.searchResults.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -76,7 +81,7 @@ class Search extends StatelessWidget {
                               )
                             ],
                           ),
-                          EmptyTip(),
+                          !controller.isInitialized.value ? const EmptyTip() : const SizedBox(),
                         ],
                       )
                     );

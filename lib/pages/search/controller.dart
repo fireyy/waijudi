@@ -9,6 +9,7 @@ class SearchController extends GetxController {
   final RxList<VideoItem> searchResults = RxList<VideoItem>([]);
   final RxInt pageKey = 1.obs;
   RxBool isLoading = false.obs;
+  RxBool isInitialized = true.obs;
   final EasyRefreshController loadController = EasyRefreshController(
     controlFinishLoad: true,
   );
@@ -29,6 +30,7 @@ class SearchController extends GetxController {
     searchResults.addAll(result.data);
     final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
     if (isLoadMore) loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
+    if (isInitialized.value) isInitialized.value = false;
   }
 
   search (String name) async {
