@@ -25,7 +25,7 @@ class History extends StatelessWidget {
                 return TextButton(
                   onPressed: () => controller.isEdit = !controller.isEdit,
                   child: Text(
-                    controller.isEdit ? 'Done' : 'Edit',
+                    controller.isEdit ? '取消' : '管理',
                     style: TextStyle(color: AppColors.DARK),
                   )
                 );
@@ -76,14 +76,44 @@ class History extends StatelessWidget {
               );
             },
           ),
-          floatingActionButton: Obx(
+          bottomNavigationBar: Obx(
             () {
+              var isNotEmpty = controller.selected.isNotEmpty;
               return Visibility(
                 visible: controller.isEdit,
-                child: FloatingActionButton(
-                  onPressed: () => controller.confirmToDeletePlaybackRecords(),
-                  backgroundColor: AppColors.LIGHT_GREEN,
-                  child: Icon(Icons.delete_forever, color: AppColors.LIGHT),
+                child: SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    color: AppColors.LIGHT,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: isNotEmpty,
+                          onChanged: (bool? value) {
+                            if (value!) {
+                              controller.selected.value = controller.searchResults.map((item) => item.id).toList();
+                            } else {
+                              controller.selected.clear();
+                            }
+                          },
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '已选择 ${controller.selected.length} 项',
+                            style: TextStyle(color: AppColors.DARK),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => isNotEmpty ? controller.confirmToDeletePlaybackRecords() : null,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(isNotEmpty ? AppColors.LIGHT_GREEN : AppColors.LIGHT_GREY),
+                          ),
+                          child: Text('删除', style: TextStyle(color: AppColors.LIGHT),),
+                        ),
+                      ],
+                    ),
+                  )
                 ),
               );
             }
