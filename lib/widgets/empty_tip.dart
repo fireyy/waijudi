@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 
-// TODO: 自定义文字
 class EmptyTip extends StatelessWidget {
+  final String? text;
   final double height;
-  const EmptyTip({Key? key, this.height = 150}) : super(key: key);
+  final Widget? action;
+  const EmptyTip({Key? key, this.text, this.height = 150, this.action}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      child: const Center(
-        child: Text('暂无数据'),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.grey[300],
+              size: 50,
+            ),
+            Text(text ?? '暂无数据'),
+            action!,
+          ],
+        ),
       ),
     );
   }

@@ -7,7 +7,6 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/list_video_item.dart';
 import 'package:waijudi/models/videoitem.dart';
 import 'package:waijudi/widgets/appbar_action.dart';
-import 'package:waijudi/widgets/loading.dart';
 import 'package:waijudi/widgets/empty_tip.dart';
 
 class List extends StatelessWidget {
@@ -79,8 +78,21 @@ class List extends StatelessWidget {
                 ),
                 Obx(
                   () {
-                    return 
-                      controller.searchResults.isEmpty ? SliverToBoxAdapter(child: EmptyTip()) : SliverList(
+                    if (controller.searchResults.isEmpty && !controller.isInitialized.value) {
+                      return SliverFillRemaining(
+                        child: EmptyTip(
+                          text: '没有找到相关资源',
+                          action: TextButton(
+                            onPressed: () {
+                              controller.setDefaultFilter();
+                              controller.filter({});
+                            },
+                            child: Text('清除筛选', style: TextStyle(color: AppColors.LIGHT_GREEN),),
+                          ),
+                        ),
+                      );
+                    }
+                    return SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           final VideoItem item = controller.searchResults.elementAt(index);

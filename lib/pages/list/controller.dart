@@ -15,7 +15,7 @@ class ListController extends GetxController {
   Rx<FilterParams> filterParams = Rx<FilterParams>(FilterParams());
   RxList<FilterModel> filters = RxList<FilterModel>([]);
   RxMap<String, dynamic> filterMap = RxMap<String, dynamic>();
-  bool isInitialized = true;
+  RxBool isInitialized = true.obs;
   RxBool isLoading = false.obs;
   final ScrollController scrollController = ScrollController();
 
@@ -31,12 +31,17 @@ class ListController extends GetxController {
       filters.value = await appController.apiClient.getType();
       await Storage.saveFilter(filters);
     }
+    setDefaultFilter();
+    searchByFilter();
+  }
+
+  setDefaultFilter () {
     for (var filter in filters) {
       filterMap.addAll({
         filter.name: filter.list.first.id
       });
     }
-    searchByFilter();
+    filterParams.value = FilterParams();
   }
 
   fetchData () async {
@@ -54,6 +59,7 @@ class ListController extends GetxController {
       final isLastPage = result.currentPage == result.lastPage || result.lastPage == 0 || result.data.isEmpty;
       loadController.finishLoad(isLastPage ? IndicatorResult.noMore : IndicatorResult.success);
     }
+    if (isInitialized.value) isInitialized.value = false;
   }
 
   filter (Map<String, dynamic> data) async {
