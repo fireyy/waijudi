@@ -44,7 +44,7 @@ class Home extends GetView<HomeController> {
         onRefresh: () async {
           // 震动反馈
           HapticFeedback.lightImpact();
-          await controller.loadCategories();
+          await controller.getVideo();
           return IndicatorResult.success;
         },
         child: CustomScrollView(

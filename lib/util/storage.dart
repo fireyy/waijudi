@@ -1,5 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:waijudi/models/filter.dart';
+import 'package:waijudi/models/category.dart';
 import 'package:waijudi/models/rank.dart';
 
 final _storage = GetStorage();
@@ -44,6 +45,10 @@ class Storage {
   static Future<void> saveRankType(dynamic value) => _storage.write('ranktype', value.toJson());
 
   static RankModel getRankType() => RankModel.fromJson(_storage.read<dynamic>('ranktype'));
+
+  static Future<void> saveCategories(dynamic value) => _storage.write('categories', value.map((v) => v.toJson()).toList());
+
+  static List<Category> getCategories() => (_storage.read<List<dynamic>>('categories') as List).map((d) => Category.fromJson(d)).toList();
 
   static Future<void> clearStorage() => _storage.erase();
 }

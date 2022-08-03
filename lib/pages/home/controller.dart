@@ -3,7 +3,7 @@ import 'package:waijudi/controller.dart';
 import 'package:waijudi/models/category.dart';
 import 'package:waijudi/models/section.dart';
 import 'package:waijudi/models/searchresult.dart';
-import 'package:easy_refresh/easy_refresh.dart';
+import 'package:waijudi/util/storage.dart';
 
 class HomeController extends GetxController {
   AppController appController = Get.find();
@@ -15,19 +15,26 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // loadCategories();
+    loadCategories();
   }
 
   loadCategories() async {
     //Load categories
+    if (Storage.hasData('categories')) {
+      categories.value = Storage.getCategories();
+    }
     List<Category> dataCategories = await appController.apiClient.getNavigation();
     categories.value = dataCategories;
-    await selectCategory(categories.first);
+    Storage.saveCategories(dataCategories);
   }
 
   selectCategory(Category category) async {
     _selectedCategory.value = category;
-    SearchResult results = await appController.apiClient.getVideo(category: category.id);
+    await getVideo();
+  }
+
+  getVideo () async {
+    SearchResult results = await appController.apiClient.getVideo(category: _selectedCategory.value.id);
     homeData.value = results.data;
   }
 
