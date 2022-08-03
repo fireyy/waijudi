@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:waijudi/models/category.dart';
 import 'package:waijudi/widgets/custom_appbar.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/pages/home/controller.dart';
@@ -24,12 +23,12 @@ class Home extends GetView<HomeController> {
         }),
         actions: [
           CustomAppBarAction(
-            () => Get.toNamed('/list'),
-            Icons.filter_list,
-          ),
-          CustomAppBarAction(
             () => Get.toNamed('/rank'),
             Icons.insights,
+          ),
+          CustomAppBarAction(
+            () => Get.toNamed('/settings'),
+            Icons.tune_outlined,
           ),
         ],
         height: 85,
@@ -38,9 +37,6 @@ class Home extends GetView<HomeController> {
           selectedCategory: controller.selectedCategory,
           onSelectCategory: controller.selectCategory,
         )),
-        onMagic: () {
-          controller.appController.showConfig();
-        },
       ),
       body: EasyRefresh(
         refreshOnStart: true,

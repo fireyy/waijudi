@@ -10,6 +10,7 @@ import 'pages/history/index.dart';
 import 'pages/more/index.dart';
 import 'pages/rank/index.dart';
 import 'pages/rank/binding.dart';
+import 'pages/settings/index.dart';
 
 class AppPages {
   static final routes = [
@@ -21,5 +22,6 @@ class AppPages {
     GetPage(name: "/history", page: () => const History()),
     GetPage(name: "/more", page: () => const More()),
     GetPage(name: "/rank", page: () => const RankPage(), bindings: [RankBinding(),]),
+    GetPage(name: "/settings", page: () => const Settings()),
   ];
 }
