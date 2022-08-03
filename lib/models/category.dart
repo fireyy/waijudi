@@ -2,7 +2,7 @@ class Category {
   int id;
   String name;
 
-  Category({this.id = 0, this.name = ''});
+  Category({this.id = 0, this.name = '推荐'});
 
   toJson() => {
     'id': id,
