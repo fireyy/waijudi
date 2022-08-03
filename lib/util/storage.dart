@@ -31,7 +31,7 @@ class Storage {
 
   static Future<void> saveApiUrls(List<String> value) => _storage.write('apiUrl', value);
 
-  static List<String> get apiUrls => _storage.read<List<String>>('apiUrl') ?? [];
+  static List<String> get apiUrls => ['https://api.mdwifi.com:778', ...(_storage.read<List<String>>('apiUrl') ?? [])];
 
   static Future<void> saveCurrentApiUrl(String value) => _storage.write('currentApiUrl', value);
 

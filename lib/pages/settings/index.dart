@@ -39,26 +39,13 @@ class Settings extends StatelessWidget {
                     ),
                     const SizedBox(height: 16,),
                     const Text('选择API地址:'),
-                    RadioListTile<String>(
-                      title: const Text('https://api.mdwifi.com:778'),
-                      value: 'https://api.mdwifi.com:778',
-                      groupValue: controller.currentApiUrl,
-                      onChanged: (String? value) {
-                        controller.setCurrentApiUrl(value);
-                      },
-                    ),
-                    ...(
-                      controller.apiUrl.map(
-                        (url) => RadioListTile<String>(
-                          title: Text(url),
-                          value: url,
-                          groupValue: controller.currentApiUrl,
-                          onChanged: (String? value) {
-                            controller.setCurrentApiUrl(value);
-                          },
-                        )
-                      )
-                    ),
+                    for (var url in controller.apiUrl)
+                      RadioListTile(
+                        title: Text(url),
+                        value: url,
+                        groupValue: controller.currentApiUrl,
+                        onChanged: (String? value) => controller.setCurrentApiUrl(value),
+                      ),
                   ],
                 );
               }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -35,12 +36,15 @@ class SettingsController extends GetxController {
   }
 
   getApiUrl () async {
-    apiUrl.value = Storage.apiUrls;
-    _currentApiUrl.value = Storage.currentApiUrl;
-    var result = await appController.apiClient.getUrl();
-    if (result.isNotEmpty) {
-      apiUrl.value = result;
-      Storage.saveApiUrls(result);
+    try {
+      apiUrl.value = Storage.apiUrls;
+      _currentApiUrl.value = Storage.currentApiUrl;
+      var result = await appController.apiClient.getUrl();
+      if (!listEquals(result, apiUrl)) {
+        Storage.saveApiUrls(result);
+      }
+    } catch (err) {
+      //
     }
   }
 }
