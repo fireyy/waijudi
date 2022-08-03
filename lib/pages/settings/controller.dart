@@ -39,7 +39,6 @@ class SettingsController extends GetxController {
     _currentApiUrl.value = Storage.currentApiUrl;
     var result = await appController.apiClient.getUrl();
     if (result.isNotEmpty) {
-      result.insert(0, 'https://api.mdwifi.com:778');
       apiUrl.value = result;
       Storage.saveApiUrls(result);
     }
