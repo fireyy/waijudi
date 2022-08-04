@@ -27,8 +27,8 @@ class VideoImage extends StatelessWidget {
               alignment: Alignment.topCenter,
               width: width,
               height: height,
-              // imageUrl: image.replaceFirst('http://', 'https://'),
-              imageUrl: image,
+              imageUrl: image.replaceFirst('http://waijudi.ywhuilong.com', 'https://api.mdwifi.com:778'),
+              // imageUrl: image,
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           );
