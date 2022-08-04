@@ -29,6 +29,7 @@ class HistoryController extends GetxController {
   }
 
   Future removeSinglePlayback (int id) async {
+    searchResults.removeWhere((item) => item.id == id);
     selected.clear();
     selected.add(id);
     await delPlaybackRecords();

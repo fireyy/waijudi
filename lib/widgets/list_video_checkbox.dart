@@ -5,10 +5,9 @@ import 'package:waijudi/util/colors.dart';
 import 'package:waijudi/widgets/video_image.dart';
 import 'package:waijudi/models/playback.dart';
 import 'package:waijudi/util/utils.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListVideoCheckbox extends StatelessWidget {
-  const ListVideoCheckbox({
+  ListVideoCheckbox({
     Key? key,
     required this.id,
     required this.thumbnail,
@@ -35,38 +34,53 @@ class ListVideoCheckbox extends StatelessWidget {
   final void Function(int, bool) onChecked;
   final bool isChecked;
   final bool isShowCheckbox;
-  final void Function(String) onDismissed;
+  final void Function(DismissDirection) onDismissed;
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
+    RxBool isReached = false.obs;
+    RxDouble progress = 0.0.obs;
+    var width = MediaQuery.of(context).size.width;
+    var buttonWidth = width * 0.15;
+  
+    return Dismissible(
       key: ValueKey<int>(id),
-      endActionPane: ActionPane(
-        extentRatio: 0.2,
-        openThreshold: 0.75,
-        motion: const ScrollMotion(),
-        dragDismissible: true,
-        dismissible: DismissiblePane(
-          closeOnCancel: true,
-          onDismissed: () {},
-          confirmDismiss: () async {
-            return Future(() {
-              // 震动反馈
-              HapticFeedback.lightImpact();
-              onDismissed('delete');
-              return true;
-            });
-          },
-        ),
-        children: [
-          SlidableAction(
-            onPressed: (context) => onDismissed('delete'),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: '删除',
-          ),
-        ],
+      direction: DismissDirection.endToStart,
+      dismissThresholds: const {
+        DismissDirection.endToStart: 0.5,
+      },
+      onUpdate: (DismissUpdateDetails details) {
+        progress.value = details.progress;
+        if (details.reached) {
+          // 震动反馈
+          HapticFeedback.vibrate();
+          isReached.value = true;
+        } else {
+          isReached.value = false;
+        }
+      },
+      onDismissed: onDismissed,
+      background: Container(),
+      secondaryBackground: Obx(
+        () {
+          return Container(
+            padding: isReached.value ? EdgeInsets.only(right: width * progress.value - buttonWidth) : EdgeInsets.zero,
+            alignment: Alignment.centerRight,
+            color: Colors.red,
+            child: SizedBox(
+              width: buttonWidth,
+              child: TextButton(
+                onPressed: () {
+                  onDismissed(DismissDirection.endToStart);
+                },
+                child: const Text(
+                  '删除',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        }
       ),
       child: GestureDetector(
         onTap: isShowCheckbox ? () => onChecked(id, !isChecked) : onTap,
