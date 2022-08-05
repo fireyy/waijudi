@@ -172,6 +172,9 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx, { int startPosition = 0 }) async {
+    setState(() {
+      _showSeekTip = false;
+    });
     widget.onChangeVideo!(tabIdx, activeIdx, startPosition: startPosition);
   }
 
@@ -433,9 +436,6 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     return _showSeekTip ? GestureDetector(
       onTap: () {
         changeCurPlayVideo(widget.curTabIdx, widget.curActiveIdx, startPosition: widget.startPosition);
-        setState(() {
-          _showSeekTip = false;
-        });
       },
       child: Container(
         decoration: BoxDecoration(

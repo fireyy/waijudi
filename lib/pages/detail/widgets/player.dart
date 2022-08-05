@@ -94,6 +94,7 @@ class _PlayerState extends State<Player>
   @override
   void initState() {
     super.initState();
+    vCfg.isAutoPlay = Get.parameters['autoPlay'] == '1' ? true : false;
     videoDetail = controller.videoDetail.value;
     // videoList = controller.videoList;
     // 格式化json转对象
@@ -114,7 +115,7 @@ class _PlayerState extends State<Player>
       _curActiveIdx = _curActiveIdx == -1 ? 0 : _curActiveIdx;
     }
     _seekPos = videoDetail.vodTimed;
-  if (controller.videoList['video']!.isNotEmpty) {
+    if (controller.videoList['video']!.isNotEmpty) {
       _dramaId = controller.videoList['video']![_curTabIdx]['list'][_curActiveIdx]['name'];
     }
   }

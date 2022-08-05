@@ -189,6 +189,7 @@ Widget listPlaybackBuilder(BuildContext context, Playback item, int index, Check
     onTap: () {
       goToDetail(item.videoName, {
         'id': '${item.vodId}',
+        'autoPlay': '1',
       });
     },
     onChecked: params.onChecked,
