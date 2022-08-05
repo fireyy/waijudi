@@ -104,16 +104,21 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     }
     // is not null
     if (_tabLength < 1) return;
+
+    FijkOption fijkOption = FijkOption();
+    // fijkOption.setHostOption("enable-snapshot", 1);
+    // fijkOption.setPlayerOption("mediacodec-all-videos", 1);
+    // fijkOption.setPlayerOption("enable-accurate-seek", 1);
+    // fijkOption.setPlayerOption("accurate-seek-timeout", 500);
+    fijkOption.setFormatOption("fflags", "fastseek");
+    player.applyOptions(fijkOption);
+    
     // autoplay and existurl
     if (showConfig.isAutoPlay && !_isPlaying) {
       int curTabIdx = widget.curTabIdx;
       int curActiveIdx = widget.curActiveIdx;
       changeCurPlayVideo(curTabIdx, curActiveIdx, startPosition: widget.startPosition);
     }
-    player.setOption(FijkOption.hostCategory, "enable-snapshot", 1);
-    player.setOption(FijkOption.playerCategory, "mediacodec-all-videos", 1);
-    player.setOption(FijkOption.playerCategory, "enable-accurate-seek", 1);
-    player.setOption(FijkOption.playerCategory, "accurate-seek-timeout", 500);
     player.addListener(_playerValueChanged);
     Wakelock.enable();
   }

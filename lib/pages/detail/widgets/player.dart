@@ -79,6 +79,7 @@ class _PlayerState extends State<Player>
     await player.reset().then((_) async {
       await player.setDataSource(nextDecVideoUrl);
       FijkOption fijkOption = FijkOption();
+      // fijkOption.setHostOption("request-screen-on", 1);
       fijkOption.setPlayerOption("start-on-prepared", 1);
       if (startPosition > 0) fijkOption.setPlayerOption("seek-at-start", startPosition * 1000);
       await player.applyOptions(fijkOption);
