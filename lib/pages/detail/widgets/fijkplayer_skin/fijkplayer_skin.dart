@@ -105,13 +105,13 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     // is not null
     if (_tabLength < 1) return;
 
-    FijkOption fijkOption = FijkOption();
+    // FijkOption fijkOption = FijkOption();
     // fijkOption.setHostOption("enable-snapshot", 1);
     // fijkOption.setPlayerOption("mediacodec-all-videos", 1);
     // fijkOption.setPlayerOption("enable-accurate-seek", 1);
     // fijkOption.setPlayerOption("accurate-seek-timeout", 500);
-    fijkOption.setFormatOption("fflags", "fastseek");
-    player.applyOptions(fijkOption);
+    // fijkOption.setFormatOption("fflags", "fastseek");
+    // player.applyOptions(fijkOption);
     
     // autoplay and existurl
     if (showConfig.isAutoPlay && !_isPlaying) {
