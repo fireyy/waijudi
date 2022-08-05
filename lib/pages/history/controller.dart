@@ -44,16 +44,12 @@ class HistoryController extends GetxController {
 
   void confirmToDeletePlaybackRecords () {
     if (selected.isNotEmpty) {
-      Get.defaultDialog(
+      confirm(
         title: 'Confirm',
-        textConfirm: 'OK',
-        textCancel: 'Cancel',
-        confirmTextColor: AppColors.LIGHT,
+        content: "Do you confirm to remove this item?",
         onConfirm: () async {
           await delPlaybackRecords();
-          Get.back();
         },
-        middleText: "Do you confirm to remove this item?",
       );
     } else {
       toast('Please select at least one item');

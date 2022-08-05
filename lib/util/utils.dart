@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:waijudi/util/storage.dart';
 
@@ -24,5 +25,39 @@ void toast(String text) {
     snackStyle: SnackStyle.FLOATING,
     maxWidth: Get.width * 0.5,
     borderRadius: 6
+  );
+}
+
+// Confirm
+void confirm ({String title = 'Confirm', String content = '', VoidCallback? onConfirm, VoidCallback? onCancel}) {
+  showCupertinoModalPopup<void>(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          /// This parameter indicates this action is the default,
+          /// and turns the action's text to bold text.
+          isDefaultAction: true,
+          onPressed: () {
+            onCancel?.call();
+            Navigator.pop(context);
+          },
+          child: const Text('No'),
+        ),
+        CupertinoDialogAction(
+          /// This parameter indicates the action would perform
+          /// a destructive action such as deletion, and turns
+          /// the action's text color to red.
+          isDestructiveAction: true,
+          onPressed: () {
+            onConfirm?.call();
+            Navigator.pop(context);
+          },
+          child: const Text('Yes'),
+        )
+      ],
+    ),
   );
 }
