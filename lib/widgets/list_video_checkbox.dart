@@ -7,7 +7,7 @@ import 'package:waijudi/models/playback.dart';
 import 'package:waijudi/util/utils.dart';
 
 class ListVideoCheckbox extends StatelessWidget {
-  ListVideoCheckbox({
+  const ListVideoCheckbox({
     Key? key,
     required this.id,
     required this.thumbnail,

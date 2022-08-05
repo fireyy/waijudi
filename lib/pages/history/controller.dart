@@ -3,6 +3,7 @@ import 'package:waijudi/controller.dart';
 import 'package:waijudi/models/playback.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:waijudi/util/colors.dart';
+import 'package:waijudi/util/utils.dart';
 
 class HistoryController extends GetxController {
   AppController appController = Get.find();
@@ -55,7 +56,7 @@ class HistoryController extends GetxController {
         middleText: "Do you confirm to remove this item?",
       );
     } else {
-      Get.snackbar('Warnning', 'Please select at least one item');
+      toast('Please select at least one item');
     }
   }
 

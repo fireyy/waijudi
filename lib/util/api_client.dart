@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:waijudi/util/encrypt.dart';
+import 'package:waijudi/util/utils.dart';
 
 import 'package:waijudi/models/api_response.dart';
 import 'package:waijudi/models/searchresult.dart';
@@ -67,7 +68,7 @@ class ApiClient {
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {
-      Get.snackbar('Hi', decodedResponse.msg);
+      toast(decodedResponse.msg);
       throw Exception(decodedResponse.msg);
     }
   }
@@ -79,7 +80,7 @@ class ApiClient {
     if (decodedResponse.code == 1) {
       return decodedResponse.data;
     } else {
-      Get.snackbar('Hi', decodedResponse.msg);
+      toast(decodedResponse.msg);
       throw Exception(decodedResponse.msg);
     }
   }

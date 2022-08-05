@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:waijudi/controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:waijudi/util/storage.dart';
+import 'package:waijudi/util/utils.dart';
 
 class SettingsController extends GetxController {
   AppController appController = Get.find();
@@ -32,7 +33,7 @@ class SettingsController extends GetxController {
   onSave () async {
     // save config
     await Storage.saveCurrentApiUrl(_currentApiUrl.value);
-    Get.snackbar('保存成功', '', snackPosition: SnackPosition.BOTTOM);
+    toast('保存成功');
   }
 
   getApiUrl () async {
