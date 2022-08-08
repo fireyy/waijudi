@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class VideoImage extends StatelessWidget {
@@ -27,7 +28,7 @@ class VideoImage extends StatelessWidget {
               alignment: Alignment.topCenter,
               width: width,
               height: height,
-              imageUrl: image.replaceFirst('http://waijudi.ywhuilong.com', 'https://api.mdwifi.com:778'),
+              imageUrl: kDebugMode ? 'https://placehold.co/600x400?text=Hello+World' : image.replaceFirst('http://waijudi.ywhuilong.com', 'https://api.mdwifi.com:778'),
               // imageUrl: image,
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),

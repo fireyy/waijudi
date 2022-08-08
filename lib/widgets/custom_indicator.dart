@@ -181,7 +181,7 @@ class CustomIndicatorState extends State<CustomIndicator>
           bottom: _axis == Axis.vertical ? null : 0,
           child: SizedBox(
             height: _axis == Axis.vertical ? _offset : double.infinity,
-            width: 300,
+            width: _axis == Axis.vertical ? double.infinity : _offset,
             child: _buildWaterDrop(),
           ),
         ),
