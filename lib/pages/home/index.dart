@@ -9,6 +9,7 @@ import 'package:waijudi/pages/home/widgets/list_sections.dart';
 import 'package:waijudi/widgets/list_categories.dart';
 import 'package:waijudi/widgets/search_field.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:waijudi/widgets/custom_header.dart';
 
 class Home extends GetView<HomeController> {
   const Home({Key? key}) : super(key: key);
@@ -47,6 +48,7 @@ class Home extends GetView<HomeController> {
           await controller.getVideo();
           return IndicatorResult.success;
         },
+        header: CustomHeader(),
         child: CustomScrollView(
           slivers: [
             Obx(() {
